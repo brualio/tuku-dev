@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="gallery" width="15.216" height="15.216" viewBox="0 0 15.216 15.216">
+    <defs>
+        <style>
+            .cls-1{fill:#d81159}
+        </style>
+    </defs>
+    <g id="Grupo_398" data-name="Grupo 398">
+        <g id="Grupo_397" data-name="Grupo 397">
+            <path id="Trazado_287" d="M1.522 85.333H0v10.651a1.521 1.521 0 0 0 1.522 1.522h10.651v-1.522H1.522z" class="cls-1" data-name="Trazado 287" transform="translate(0 -82.29)"/>
+            <path id="Trazado_288" d="M95.984 0h-9.129a1.521 1.521 0 0 0-1.522 1.522v9.129a1.521 1.521 0 0 0 1.522 1.522h9.129a1.521 1.521 0 0 0 1.522-1.522V1.522A1.521 1.521 0 0 0 95.984 0zm-9.129 10.651l2.282-3.043 1.544 2.062 2.26-2.823 3.043 3.8z" class="cls-1" data-name="Trazado 288" transform="translate(-82.29)"/>
+        </g>
+    </g>
+</svg>

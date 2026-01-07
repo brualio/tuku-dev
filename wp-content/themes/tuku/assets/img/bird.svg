@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="53.107" height="49.553" viewBox="0 0 53.107 49.553">
+    <defs>
+        <style>
+            .cls-1{fill:#fff}
+        </style>
+    </defs>
+    <g id="bird">
+        <path id="Trazado_45" d="M336.334 255.888A14.9 14.9 0 0 0 351.222 241a14.9 14.9 0 0 0-14.888 14.888z" class="cls-1" data-name="Trazado 45" transform="translate(-301.448 -217.779)"/>
+        <path id="Trazado_46" d="M273.134 416.642h1.556a4.648 4.648 0 0 1 1.556.268v-2.377h-3.112z" class="cls-1" data-name="Trazado 46" transform="translate(-244.803 -373.313)"/>
+        <path id="Trazado_47" d="M332.776 464.866h-2.222a4.66 4.66 0 0 1 0 3.112h2.266a1.556 1.556 0 0 0 1.554-1.631 1.585 1.585 0 0 0-1.598-1.481z" class="cls-1" data-name="Trazado 47" transform="translate(-296.268 -418.425)"/>
+        <path id="Trazado_48" d="M188.289 419.754h-5.11v-5.221h-3.112v5.221h-1.777a1.556 1.556 0 1 0 0 3.112h10a1.556 1.556 0 1 0 0-3.112z" class="cls-1" data-name="Trazado 48" transform="translate(-158.402 -373.313)"/>
+        <path id="Trazado_49" d="M264.871 25.466h-1.9a9.788 9.788 0 0 0-2.775-5.436 9.941 9.941 0 0 0-6.993-2.9 9.668 9.668 0 0 0-6.792 2.812l-1.649 1.658v20.421a16.322 16.322 0 0 1-6.755 13.221h7.087a18.02 18.02 0 0 1 18-18v-8.664h1.777a1.556 1.556 0 0 0 0-3.112zm-11.666 3.112a1.556 1.556 0 1 1 1.556-1.556 1.558 1.558 0 0 1-1.556 1.556z" class="cls-1" data-name="Trazado 49" transform="translate(-213.32 -17.134)"/>
+        <path id="Trazado_50" d="M28.331 107.491v-17.31L.456 118.057a1.556 1.556 0 0 0 1.1 2.656h13.553a13.236 13.236 0 0 0 13.221-13.221z" class="cls-1" data-name="Trazado 50" transform="translate(0 -82.604)"/>
+    </g>
+</svg>

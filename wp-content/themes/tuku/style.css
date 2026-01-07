@@ -1,0 +1,501 @@
+/*!
+Theme Name: Tuku
+Theme URI: http://www.tuku.com.pe/
+Author: https://www.tuku.com.pe/
+Author URI: https://www.tuku.com.pe/
+Description: Template desarrollado por Tuku.
+Version: 1.0.0
+License: GNU General Public License v2 or later
+License URI: LICENSE
+Text Domain: tuku
+Tags: custom-background, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready
+
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned with others.
+
+Grupo Aleman is based on Underscores https://underscores.me/, (C) 2012-2017 Automattic, Inc.
+Underscores is distributed under the terms of the GNU GPL v2 or later.
+
+Normalizing styles have been helped along thanks to the fine work of
+Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
+*/
+/*--------------------------------------------------------------
+>>> TABLE OF CONTENTS:
+----------------------------------------------------------------
+# Normalize
+# Typography
+# Elements
+# Forms
+# Navigation
+	## Links
+	## Menus
+# Accessibility
+# Alignments
+# Clearings
+# Widgets
+# Content
+	## Posts and pages
+	## Comments
+# Infinite scroll
+# Media
+	## Captions
+	## Galleries
+--------------------------------------------------------------*/
+/*--------------------------------------------------------------
+# Normalize
+--------------------------------------------------------------*/
+/* normalize.css v8.0.0 | MIT License | github.com/necolas/normalize.css */
+
+/* Document
+	 ========================================================================== */
+
+/**
+ * 1. Correct the line height in all browsers.
+ * 2. Prevent adjustments of font size after orientation changes in iOS.
+ */
+
+@charset "utf-8";
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900');
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900');
+/**
+*
+* -----------------------------------------------------------------------------
+*
+* Template : Hepta - Multipurpose Business HTML Template
+* Author : rs-theme
+* Author URI : http://www.rstheme.com/
+*
+* -----------------------------------------------------------------------------
+*
+**/
+/* TABLE OF CONTENT
+---------------------------------------------------------
+01. General CSS
+02. Global Class
+03. Header Section
+04. Sticky Menu
+05. Slider Section
+06. About Us
+07. Top History
+08. Call To Action
+09. Services CSS
+10. Portfolio CSS
+11. Pricing Tables
+12. Team Member
+13. Testimonial CSS
+14. Blog Post
+15. Blog Details
+16. Blog Sidebar
+17. Contact Us
+18. Footer CSS
+19. Scroll Up
+20. video Section
+21. Counter Section
+22. Breadcrumbs CSS
+23. Banner Area
+24. Portfolio Details
+25. Our History Section
+26. Faq Section Start
+27. CTA Section Start
+28. Responsibiity Section Start
+29. Why Choose US
+30. How We Work
+31. Project Style
+32. App ScreenShot
+33. Customer Review CSS
+34. Map Section
+35. Different Pages CSS
+36. Preloader CSS
+--------------------------------------------------------*/
+/* -----------------------------------
+    01. General CSS
+*/
+
+
+// jQuery('.facetwp-facet-promocion').find('.facetwp-checkbox[data-value=0]').hide();
+
+.facetwp-facet-promocion .facetwp-checkbox[data-value=0]{
+	display:none;
+}
+
+
+// custom
+
+.about-home__play-mobile {
+	position: relative;
+}
+.about-home__play2 {
+	top: 0;
+    right: 0;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.about-home__play2-action {
+	    position: absolute;
+    width: 58px;
+    height: 58px;
+    background-color: #d81159;
+    z-index: 2;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+}
+
+.header__mobile__lenguajes {
+	display: flex;
+}
+
+.header__mobile__lenguajes a{
+	padding: 16px;
+}
+.header__mobile__lenguajes img {
+	border-radius: 50%;
+}
+.header__mobile__lenguajes span{
+	font-size: 16px !important;
+	margin-left: 10px !important;
+}
+
+.first-col{
+	max-width: 50%;	
+}
+
+.tour-detail-heart > p:last-child{
+	color: #d81159;
+	font-size: 15px;
+}
+.detail-tour .swiper-slide img {
+    max-height: 280px !important;
+}
+.tab__content .tabs__content .itinerario__wrap .accordeon__itineratio .accordeon-content{
+	padding: 30px 25px;
+}
+.about-block_5{
+	padding-bottom: 20px !important;
+}
+.home-logotipos {
+	padding: 20px 0 50px 0 !important;
+}
+@media screen and (max-width: 767px){
+.block__entry .entry__top .title__entry h1 {
+   font-size: 20px !important;
+}
+	.related__tours .container h1{
+		font-size: 18px !important;
+		text-align: left !important;
+	}
+	.detail-tour .swiper-slide img {
+    max-height: 150px !important;
+}
+	.slide-about{
+		padding-bottom: 15px !important;
+	}
+	.whislist{
+		margin-top: 40px !important;
+		margin-bottom: 40px !important;
+	}
+	.whislist-content-empty{
+		    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+	}
+	.whislist-title{
+		font-size: 20px !important;
+	}
+	.btn__gallery{
+		top: 10px !important;
+    	right: 10px !important;
+	}
+}
+.tab__content .tabs__content .itinerario__wrap .accordeon__itineratio .accordeon-title .wrap__number{
+	min-width: 32px !important;
+    min-height: 32px !important;
+    font-size: 18px !important;
+}
+
+.tab__content .tabs__content .itinerario__wrap .accordeon__itineratio .accordeon-title .wrap__title__iti {
+	flex: 1;
+}
+@media screen and (min-width: 1024px){
+	.tab__content .tabs__content .itinerario__wrap .accordeon__itineratio .accordeon-title .wrap__number{
+	width: 35px !important;
+    height: 35px !important;
+    font-size: 18px !important;
+}
+	.related__tours .prev-slide-car{
+	width: 42px !important;
+	height: 42px !important;
+}
+.home .popular-home__link{
+	font-size: 16px !important;
+}
+}
+@media screen and (min-width: 1200px){
+	.footer-end__otherlinks__list li{
+   /* margin-right: 10px !important;*/
+}
+.footer-end__otherlinks__list li a {
+    font-size: 13px !important;
+}
+}
+
+
+
+/* footer */
+
+.footer-container {
+  max-width: 1600px;
+  padding: 15px;
+	width: 100%;
+	margin:0 auto;
+}
+
+.footer-top {
+}
+
+.footer-top-left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-collapse {
+  padding: 0 10px;
+  border-bottom: 1px solid #d5d5d5;
+}
+
+.footer-collapse .footer-collapse-body {
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.footer-collapse.show .footer-collapse-body {
+  height: 100%;
+  margin-bottom: 20px;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.5s ease-in;
+}
+
+.footer-collapse-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.footer-collapse-header > span {
+	transform: rotate(180deg);
+}
+
+.footer-collapse.show .footer-collapse-header > span {
+	transform: rotate(0deg);
+}
+
+.footer-collapse-header h2 {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 22px;
+
+  color: rgba(23, 23, 23, 0.75);
+  margin-top: 12px;
+}
+
+.footer-collapse-link, .footer-container .menu-item {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 22px;
+  color: rgba(18, 18, 18, 0.74);
+  margin-bottom: 8px;
+}
+
+.footer-container .menu-item a {
+	font-family: "Poppins";
+	  font-style: normal;
+	font-weight: 400;
+	text-transform: capitalize;
+  font-size: 14px;
+  line-height: 20px;
+  color: rgba(18, 18, 18, 0.74);
+}
+#menu-footer-mails-1 a {
+	text-transform: lowercase !important;
+}
+
+
+.footer-collapse-link a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.footer-social {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.footer-end {
+  padding-top: 10px;
+}
+
+.footer-end-wrapper {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-book {
+  margin-bottom: 30px;
+}
+
+.footer-book a {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  text-decoration: none;
+
+  color: rgba(44, 44, 44, 0.85);
+	display: flex;
+    align-items: center;
+}
+
+.footer-book a svg {
+	margin-right: 5px;
+}
+
+.footer-copy {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  text-align: center;
+
+  color: rgba(44, 44, 44, 0.85);
+  display: flex;
+  align-items: center;
+}
+
+@media screen and (min-width: 1024px) {
+  .footer-top-wrapper {
+    display: flex;
+    justify-content: space-between;
+  }
+	.footer-container{
+		padding: 15px 40px;
+	}
+  .footer-collapse-header h2 {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 27px;
+  }
+
+  .footer-collapse {
+    border-bottom: none;
+  }
+  .footer-collapse .footer-collapse-body {
+    height: auto;
+    opacity: 1;
+    visibility: visible;
+  }
+  .footer-collapse-header span {
+    display: none;
+  }
+
+  .footer-collapse-link {
+    font-weight: 200;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .footer-collapse-link a:hover {
+    color: #d81159;
+  }
+
+  .footer-top {
+    border-bottom: 1px solid #d5d5d5;
+  }
+
+  .footer-end-wrapper {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .footer-book {
+    margin-bottom: 0px;
+  }
+}
+
+.header__right__mail, .header__right__what {
+	    position: relative;
+    padding: 0 10px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	cursor: pointer;
+}
+
+.dropdown__content {
+	display: none;
+	position: absolute;
+    bottom: -169px;
+    background: #fff;
+    left: -173px;
+	padding: 14px 20px;
+}
+.dropdown__content ul {
+	margin: 0;
+}
+
+.dropdown__content label {
+	font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 18px;
+color: rgba(56, 55, 55, 0.6);
+	display: block;
+}
+
+.dropdown__content li {
+	font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: #383737;
+	margin-top: 5px;
+}
+
+.dropdown__content li a {
+	    text-decoration: none;
+    color: inherit;
+}
+
+.header__right__mail:hover, .header__right__mail.active, .header__right__what:hover {
+	background: #C11252;
+}
+.header__right__mail.active .dropdown__content {
+	display: block;
+}
+
+.hubspot{
+	display: none;
+}
+
+.wpcf7-spinner {
+	position: absolute !important;
+}
+
