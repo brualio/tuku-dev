@@ -499,3 +499,1642 @@ color: rgba(56, 55, 55, 0.6);
 	position: absolute !important;
 }
 
+/* ===================================
+   ENTRY TEXT - Product Sidebar
+   =================================== */
+.entry__text {
+	background: #fff;
+	border-radius: 16px;
+	padding: 24px;
+	box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+}
+
+.entry__text .wrap__price {
+	margin-bottom: 16px;
+}
+
+.entry__text .wrap__price .price-label {
+	display: block;
+	font-family: 'Poppins', sans-serif;
+	font-size: 14px;
+	font-weight: 400;
+	color: #d81159;
+	margin-bottom: 4px;
+}
+
+.entry__text .wrap__price .price-row {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+.entry__text .wrap__price .price-current {
+	font-family: 'Poppins', sans-serif;
+	font-size: 36px;
+	font-weight: 700;
+	color: #1a1a1a;
+	line-height: 1.1;
+}
+
+.entry__text .wrap__price .price-regular {
+	font-family: 'Poppins', sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+	color: #999;
+	text-decoration: line-through;
+}
+
+.entry__text .wrap__price .price-discount {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: #d81159;
+	color: #fff;
+	font-family: 'Poppins', sans-serif;
+	font-size: 13px;
+	font-weight: 600;
+	padding: 4px 12px;
+	border-radius: 6px;
+	line-height: 1.3;
+}
+
+/* Date/person picker row */
+.entry-date-picker {
+	margin-bottom: 16px;
+}
+
+.entry-date-picker .date-picker-row {
+	display: flex;
+	align-items: center;
+	border: 1px solid #e0e0e0;
+	border-radius: 12px;
+	padding: 12px 16px;
+	color: #323232;
+	transition: border-color 0.2s ease;
+}
+
+.entry-date-picker .date-picker-row:hover {
+	border-color: #d81159;
+}
+
+.entry-date-picker .date-picker-col {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex: 1;
+	font-family: 'Poppins', sans-serif;
+	font-size: 14px;
+	font-weight: 400;
+	color: #323232;
+}
+
+.entry-date-picker .date-picker-trigger {
+	cursor: pointer;
+}
+
+.entry-date-picker .date-picker-col svg {
+	color: #666;
+	flex-shrink: 0;
+}
+
+.entry-date-picker .date-picker-separator {
+	width: 1px;
+	height: 24px;
+	background: #e0e0e0;
+	margin: 0 12px;
+	flex-shrink: 0;
+}
+
+/* Date input styled as plain text */
+.pac-entry-date-field,
+.pac-entry-date-field + .flatpickr-input {
+	border: none !important;
+	outline: none !important;
+	background: transparent !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	font-family: 'Poppins', sans-serif !important;
+	font-size: 14px !important;
+	font-weight: 400 !important;
+	color: #323232 !important;
+	cursor: pointer !important;
+	width: 100% !important;
+	box-shadow: none !important;
+	height: auto !important;
+	line-height: normal !important;
+}
+
+.pac-entry-date-field::placeholder {
+	color: #999;
+}
+
+/* Guest counter */
+.pac-guests-col .guest-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	border: 1px solid #ddd;
+	border-radius: 50%;
+	background: #fff;
+	color: #323232;
+	font-size: 16px;
+	line-height: 1;
+	cursor: pointer;
+	padding: 0;
+	transition: all 0.15s ease;
+	font-family: 'Poppins', sans-serif;
+}
+
+.pac-guests-col .guest-btn:hover:not(:disabled) {
+	border-color: #d81159;
+	color: #d81159;
+}
+
+.pac-guests-col .guest-btn:disabled {
+	opacity: 0.3;
+	cursor: not-allowed;
+}
+
+.pac-guests-col .guest-count {
+	font-weight: 600;
+	min-width: 16px;
+	text-align: center;
+}
+
+.pac-guests-col .guest-label {
+	color: #666;
+}
+
+/* ===================================
+   Flatpickr Range Calendar
+   =================================== */
+.pac-entry-flatpickr {
+	border-radius: 16px !important;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12) !important;
+	border: none !important;
+	font-family: 'Poppins', sans-serif !important;
+	overflow: hidden;
+	padding: 0 !important;
+}
+
+/* White header with month names */
+.pac-entry-flatpickr .flatpickr-months {
+	background: #fff;
+	padding: 12px 8px 4px;
+	border-bottom: none;
+}
+
+.pac-entry-flatpickr .flatpickr-month {
+	color: #1a1a1a;
+	fill: #1a1a1a;
+	height: 32px;
+}
+
+.pac-entry-flatpickr .flatpickr-current-month {
+	font-size: 15px;
+	font-weight: 400;
+	padding-top: 4px;
+	color: #1a1a1a;
+}
+
+.pac-entry-flatpickr .flatpickr-current-month .flatpickr-monthDropdown-months {
+	color: #1a1a1a;
+	font-weight: 600;
+	background: transparent;
+	-webkit-appearance: none;
+	font-size: 15px;
+}
+
+.pac-entry-flatpickr .flatpickr-current-month .flatpickr-monthDropdown-months option {
+	color: #323232;
+	background: #fff;
+}
+
+.pac-entry-flatpickr .flatpickr-current-month input.cur-year {
+	color: #1a1a1a;
+	font-weight: 400;
+	font-size: 15px;
+}
+
+/* Nav arrows */
+.pac-entry-flatpickr .flatpickr-prev-month,
+.pac-entry-flatpickr .flatpickr-next-month {
+	fill: #1a1a1a;
+	color: #1a1a1a;
+	padding: 8px 12px;
+	top: 10px;
+}
+
+.pac-entry-flatpickr .flatpickr-prev-month svg,
+.pac-entry-flatpickr .flatpickr-next-month svg {
+	fill: #1a1a1a !important;
+	width: 12px;
+	height: 12px;
+}
+
+.pac-entry-flatpickr .flatpickr-prev-month:hover svg,
+.pac-entry-flatpickr .flatpickr-next-month:hover svg {
+	fill: #d81159 !important;
+}
+
+/* Weekday headers */
+.pac-entry-flatpickr .flatpickr-weekdays {
+	background: #fff;
+	border-bottom: none;
+	padding-top: 4px;
+}
+
+.pac-entry-flatpickr .flatpickr-weekday {
+	color: #999;
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+}
+
+/* Day cells */
+.pac-entry-flatpickr .flatpickr-days {
+	border: none !important;
+}
+
+.pac-entry-flatpickr .dayContainer {
+	justify-content: flex-start;
+}
+
+.pac-entry-flatpickr .flatpickr-day {
+	border-radius: 50%;
+	font-size: 14px;
+	height: 38px;
+	line-height: 38px;
+	flex-basis: 14.2857%;
+	max-width: 14.2857%;
+	color: #323232;
+	font-weight: 400;
+	border: 2px solid transparent;
+	margin: 0;
+}
+
+/* Weekend days bold */
+.pac-entry-flatpickr .flatpickr-day:nth-child(7n+6),
+.pac-entry-flatpickr .flatpickr-day:nth-child(7n) {
+	font-weight: 700;
+}
+
+.pac-entry-flatpickr .flatpickr-day:hover:not(.flatpickr-disabled):not(.selected):not(.startRange):not(.endRange) {
+	background: rgba(216, 17, 89, 0.08);
+	border-color: rgba(216, 17, 89, 0.3);
+}
+
+/* Selected / range */
+.pac-entry-flatpickr .flatpickr-day.selected,
+.pac-entry-flatpickr .flatpickr-day.startRange,
+.pac-entry-flatpickr .flatpickr-day.endRange {
+	background: #d81159 !important;
+	border-color: #d81159 !important;
+	color: #fff !important;
+	font-weight: 600;
+	border-radius: 50% !important;
+}
+
+.pac-entry-flatpickr .flatpickr-day.selected:hover,
+.pac-entry-flatpickr .flatpickr-day.startRange:hover,
+.pac-entry-flatpickr .flatpickr-day.endRange:hover {
+	background: #b00e4a !important;
+	border-color: #b00e4a !important;
+}
+
+.pac-entry-flatpickr .flatpickr-day.inRange {
+	background: rgba(216, 17, 89, 0.12) !important;
+	border-color: transparent !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+}
+
+/* Today */
+.pac-entry-flatpickr .flatpickr-day.today:not(.selected):not(.startRange):not(.endRange) {
+	border: 2px solid #d81159;
+	background: transparent;
+	color: #d81159;
+	font-weight: 600;
+}
+
+/* Disabled */
+.pac-entry-flatpickr .flatpickr-day.flatpickr-disabled,
+.pac-entry-flatpickr .flatpickr-day.flatpickr-disabled:hover {
+	color: #ccc !important;
+	background: transparent !important;
+	border-color: transparent !important;
+}
+
+.pac-entry-flatpickr .flatpickr-day.prevMonthDay,
+.pac-entry-flatpickr .flatpickr-day.nextMonthDay {
+	color: #ccc;
+}
+
+/* Separator between months */
+.pac-entry-flatpickr .flatpickr-innerContainer {
+	border-bottom: none;
+}
+
+/* Bottom action bar */
+.pac-range-bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 14px 20px;
+	border-top: 1px solid #eee;
+	background: #fff;
+}
+
+.pac-range-bar-text {
+	font-family: 'Poppins', sans-serif;
+	font-size: 14px;
+	color: #323232;
+	font-weight: 400;
+}
+
+.pac-range-bar-actions {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.pac-range-clear {
+	font-family: 'Poppins', sans-serif;
+	font-size: 14px;
+	color: #666;
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 6px 12px;
+}
+
+.pac-range-clear:hover {
+	color: #d81159;
+}
+
+.pac-range-apply {
+	font-family: 'Poppins', sans-serif;
+	font-size: 14px;
+	font-weight: 600;
+	color: #fff;
+	background: #d81159;
+	border: none;
+	border-radius: 8px;
+	padding: 8px 24px;
+	cursor: pointer;
+	transition: background 0.2s ease;
+}
+
+.pac-range-apply:hover {
+	background: #b00e4a;
+}
+
+/* Add to cart button */
+.entry__text .btn__enquire {
+	margin-top: 0;
+}
+
+.entry__text .btn-add-to-cart {
+	display: block;
+	width: 100%;
+	padding: 14px 24px;
+	background: linear-gradient(135deg, #e8446d 0%, #c41054 100%);
+	color: #fff;
+	font-family: 'Poppins', sans-serif;
+	font-size: 16px;
+	font-weight: 600;
+	text-align: center;
+	border: none;
+	border-radius: 12px;
+	cursor: pointer;
+	transition: opacity 0.2s ease, transform 0.2s ease;
+	line-height: 1.4;
+}
+
+.entry__text .btn-add-to-cart:hover {
+	opacity: 0.9;
+	transform: translateY(-1px);
+}
+
+/* Override any legacy h6/h1 inside wrap__price */
+.entry__text .wrap__price h6,
+.entry__text .wrap__price h1 {
+	display: none;
+}
+
+@media screen and (max-width: 767px) {
+	.entry__text {
+		padding: 20px 16px;
+		border-radius: 12px;
+	}
+
+	.entry__text .wrap__price .price-current {
+		font-size: 28px;
+	}
+
+	.entry__text .wrap__price .price-regular {
+		font-size: 14px;
+	}
+
+	.entry-date-picker .date-picker-row {
+		padding: 10px 12px;
+	}
+
+	.entry-date-picker .date-picker-col {
+		font-size: 13px;
+		gap: 6px;
+	}
+
+	.pac-entry-date-field,
+	.pac-entry-date-field + .flatpickr-input {
+		font-size: 13px !important;
+	}
+
+	.entry-date-picker .date-picker-separator {
+		margin: 0 8px;
+	}
+
+	.pac-guests-col .guest-btn {
+		width: 22px;
+		height: 22px;
+		font-size: 14px;
+	}
+
+	.entry__text .btn-add-to-cart {
+		font-size: 15px;
+		padding: 12px 20px;
+	}
+
+	.pac-entry-flatpickr {
+		border-radius: 12px !important;
+	}
+
+	.pac-entry-flatpickr .flatpickr-day {
+		height: 34px;
+		line-height: 34px;
+		font-size: 13px;
+	}
+
+	.pac-range-bar {
+		padding: 12px 14px;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+
+	.pac-range-bar-text {
+		font-size: 13px;
+		width: 100%;
+	}
+}
+
+/* ===================================
+   HEADER CART ICON
+   =================================== */
+.header__right__cart {
+	position: relative;
+	padding: 0 10px;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.header__cart-link {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.header__cart-link .cart-count {
+	position: absolute;
+	top: -8px;
+	right: -10px;
+	background: #fff;
+	color: #d81159;
+	font-family: 'Poppins', sans-serif;
+	font-size: 11px;
+	font-weight: 700;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+}
+
+.header__cart-link .cart-count.hidden {
+	display: none;
+}
+
+/* ===================================
+   CART PAGE
+   =================================== */
+.tuku-cart-page {
+	padding: 30px 0 60px;
+	min-height: 60vh;
+}
+
+.tuku-cart-back {
+	font-family: 'Poppins', sans-serif;
+	font-size: 14px;
+	color: #d81159;
+	text-decoration: none;
+	display: inline-block;
+	margin-bottom: 8px;
+}
+
+.tuku-cart-back:hover {
+	text-decoration: underline;
+}
+
+.tuku-cart-title {
+	font-family: 'Poppins', sans-serif;
+	font-size: 24px;
+	font-weight: 700;
+	color: #1a1a1a;
+	margin: 0 0 24px 0;
+}
+
+/* Cart layout: items left, summary right */
+.tuku-cart-layout {
+	display: grid;
+	grid-template-columns: 1fr 340px;
+	gap: 32px;
+	align-items: start;
+}
+
+/* Cart item card */
+.tuku-cart-item {
+	display: flex;
+	gap: 16px;
+	background: #fff;
+	border: 1px solid #eee;
+	border-radius: 12px;
+	padding: 16px;
+	margin-bottom: 16px;
+}
+
+.tuku-cart-item__thumb {
+	flex-shrink: 0;
+	width: 80px;
+	height: 80px;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.tuku-cart-item__thumb img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.tuku-cart-item__info {
+	flex: 1;
+	min-width: 0;
+}
+
+.tuku-cart-item__header {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 12px;
+}
+
+.tuku-cart-item__name {
+	font-family: 'Poppins', sans-serif;
+	font-size: 16px;
+	font-weight: 600;
+	color: #1a1a1a;
+	margin: 0 0 2px 0;
+	line-height: 1.3;
+}
+
+.tuku-cart-item__name a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.tuku-cart-item__location {
+	font-family: 'Poppins', sans-serif;
+	font-size: 13px;
+	color: #666;
+}
+
+.tuku-cart-item__remove {
+	background: none;
+	border: none;
+	color: #999;
+	cursor: pointer;
+	padding: 4px;
+	flex-shrink: 0;
+}
+
+.tuku-cart-item__remove:hover {
+	color: #d81159;
+}
+
+.tuku-cart-item__meta {
+	display: flex;
+	gap: 16px;
+	margin-top: 10px;
+	flex-wrap: wrap;
+}
+
+.tuku-cart-item__date,
+.tuku-cart-item__guests {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-family: 'Poppins', sans-serif;
+	font-size: 13px;
+	color: #555;
+}
+
+.tuku-cart-item__meta svg {
+	flex-shrink: 0;
+	color: #888;
+}
+
+.tuku-cart-item__price {
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+	justify-content: flex-end;
+	margin-top: 8px;
+}
+
+.tuku-cart-item__price-regular {
+	font-family: 'Poppins', sans-serif;
+	font-size: 13px;
+	color: #999;
+	text-decoration: line-through;
+}
+
+.tuku-cart-item__price-current {
+	font-family: 'Poppins', sans-serif;
+	font-size: 18px;
+	font-weight: 700;
+	color: #1a1a1a;
+}
+
+/* Cart summary */
+.tuku-cart-summary__title {
+	font-family: 'Poppins', sans-serif;
+	font-size: 18px;
+	font-weight: 600;
+	color: #1a1a1a;
+	margin: 0 0 16px 0;
+}
+
+.tuku-cart-summary__card {
+	background: #fff;
+	border: 1px solid #eee;
+	border-radius: 12px;
+	padding: 20px;
+}
+
+.tuku-cart-summary__row {
+	display: flex;
+	justify-content: space-between;
+	font-family: 'Poppins', sans-serif;
+	font-size: 14px;
+	color: #323232;
+	margin-bottom: 10px;
+}
+
+.tuku-cart-summary__discount {
+	color: #d81159;
+}
+
+.tuku-cart-summary__total {
+	display: flex;
+	justify-content: space-between;
+	font-family: 'Poppins', sans-serif;
+	font-size: 16px;
+	font-weight: 700;
+	color: #1a1a1a;
+	padding-top: 14px;
+	margin-top: 14px;
+	border-top: 1px solid #eee;
+	margin-bottom: 20px;
+}
+
+.tuku-cart-btn-primary {
+	display: block;
+	width: 100%;
+	padding: 14px;
+	background: #d81159;
+	color: #fff;
+	font-family: 'Poppins', sans-serif;
+	font-size: 15px;
+	font-weight: 600;
+	text-align: center;
+	border: none;
+	border-radius: 10px;
+	cursor: pointer;
+	text-decoration: none;
+	margin-bottom: 10px;
+	transition: background 0.2s ease;
+	box-sizing: border-box;
+}
+
+.tuku-cart-btn-primary:hover {
+	background: #b00e4a;
+	color: #fff;
+}
+
+.tuku-cart-btn-outline {
+	display: block;
+	width: 100%;
+	padding: 14px;
+	background: #fff;
+	color: #323232;
+	font-family: 'Poppins', sans-serif;
+	font-size: 15px;
+	font-weight: 500;
+	text-align: center;
+	border: 1px solid #ddd;
+	border-radius: 10px;
+	cursor: pointer;
+	text-decoration: none;
+	transition: border-color 0.2s ease;
+	box-sizing: border-box;
+}
+
+.tuku-cart-btn-outline:hover {
+	border-color: #d81159;
+	color: #d81159;
+}
+
+/* Empty cart inline */
+.tuku-cart-empty-inline {
+	text-align: center;
+	padding: 60px 20px;
+}
+
+.tuku-cart-empty-inline svg {
+	margin-bottom: 16px;
+}
+
+.tuku-cart-empty-inline h2 {
+	font-family: 'Poppins', sans-serif;
+	font-size: 20px;
+	font-weight: 600;
+	color: #1a1a1a;
+	margin: 0 0 8px 0;
+}
+
+.tuku-cart-empty-inline p {
+	font-family: 'Poppins', sans-serif;
+	font-size: 14px;
+	color: #666;
+	margin: 0 0 20px 0;
+}
+
+.tuku-cart-empty-inline .tuku-cart-btn-outline {
+	display: inline-block;
+	width: auto;
+	padding: 12px 32px;
+}
+
+/* Remove modal */
+.tuku-modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.tuku-modal__overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,0.4);
+}
+
+.tuku-modal__content {
+	position: relative;
+	background: #fff;
+	border-radius: 16px;
+	padding: 28px;
+	max-width: 380px;
+	width: 90%;
+	box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+
+.tuku-modal__close {
+	position: absolute;
+	top: 16px;
+	right: 16px;
+	background: none;
+	border: none;
+	font-size: 22px;
+	color: #999;
+	cursor: pointer;
+	line-height: 1;
+}
+
+.tuku-modal__close:hover {
+	color: #1a1a1a;
+}
+
+.tuku-modal__content h3 {
+	font-family: 'Poppins', sans-serif;
+	font-size: 18px;
+	font-weight: 700;
+	color: #1a1a1a;
+	margin: 0 0 8px 0;
+}
+
+.tuku-modal__content p {
+	font-family: 'Poppins', sans-serif;
+	font-size: 14px;
+	color: #666;
+	margin: 0 0 24px 0;
+}
+
+.tuku-modal__actions {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 12px;
+}
+
+.tuku-modal__cancel {
+	font-family: 'Poppins', sans-serif;
+	font-size: 14px;
+	color: #323232;
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 8px 12px;
+}
+
+.tuku-modal__cancel:hover {
+	color: #d81159;
+}
+
+.tuku-modal__confirm {
+	font-family: 'Poppins', sans-serif;
+	font-size: 14px;
+	font-weight: 600;
+	color: #fff;
+	background: #d81159;
+	border: none;
+	border-radius: 8px;
+	padding: 10px 24px;
+	cursor: pointer;
+	text-decoration: none;
+	display: inline-block;
+}
+
+.tuku-modal__confirm:hover {
+	background: #b00e4a;
+	color: #fff;
+}
+
+/* Cart responsive */
+@media screen and (max-width: 767px) {
+	.tuku-cart-layout {
+		grid-template-columns: 1fr;
+		gap: 24px;
+	}
+
+	.tuku-cart-title {
+		font-size: 20px;
+	}
+
+	.tuku-cart-item {
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	.tuku-cart-item__thumb {
+		width: 100%;
+		height: 160px;
+	}
+
+	.tuku-cart-item__price {
+		justify-content: flex-start;
+	}
+
+	.tuku-modal__actions {
+		flex-direction: column-reverse;
+	}
+
+	.tuku-modal__confirm {
+		width: 100%;
+		text-align: center;
+	}
+}
+
+/* ===================================
+   CHECKOUT PAGE - Stacked Accordion
+   =================================== */
+.tuku-checkout-page {
+	padding: 30px 0 60px;
+	min-height: 60vh;
+	background: #f7f7f8;
+}
+
+.tuku-checkout-back {
+	font-family: 'Poppins', sans-serif;
+	font-size: 14px;
+	color: #d81159;
+	text-decoration: none;
+	display: inline-block;
+	margin-bottom: 8px;
+}
+
+.tuku-checkout-back:hover {
+	text-decoration: underline;
+}
+
+.tuku-checkout-title {
+	font-family: 'Poppins', sans-serif;
+	font-size: 24px;
+	font-weight: 700;
+	color: #1a1a1a;
+	margin: 0 0 28px 0;
+}
+
+/* Layout: stacked steps left, summary right */
+.tuku-checkout-layout {
+	display: grid;
+	grid-template-columns: 1fr 380px;
+	gap: 32px;
+	align-items: start;
+}
+
+/* ---- Stacked Step Cards ---- */
+.tuku-step-card {
+	background: #fff;
+	border-radius: 16px;
+	padding: 24px 28px;
+	margin-bottom: 16px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+	transition: box-shadow 0.3s ease;
+}
+
+.tuku-step-card.active {
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+}
+
+.tuku-step-card.pending {
+	opacity: 0.5;
+	pointer-events: none;
+}
+
+/* Step header row */
+.tuku-step-header {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+}
+
+.tuku-step-num {
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: 'Poppins', sans-serif;
+	font-size: 14px;
+	font-weight: 600;
+	background: #e8e8e8;
+	color: #999;
+	flex-shrink: 0;
+	transition: all 0.3s ease;
+}
+
+.tuku-step-card.active .tuku-step-num,
+.tuku-step-card.completed .tuku-step-num {
+	background: #d81159;
+	color: #fff;
+}
+
+.tuku-step-heading {
+	font-family: 'Poppins', sans-serif;
+	font-size: 16px;
+	font-weight: 600;
+	color: #1a1a1a;
+	margin: 0;
+	flex: 1;
+}
+
+.tuku-step-card.pending .tuku-step-heading {
+	color: #999;
+}
+
+/* Edit button */
+.tuku-step-edit {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	background: none;
+	border: none;
+	font-family: 'Poppins', sans-serif;
+	font-size: 13px;
+	font-weight: 500;
+	color: #888;
+	cursor: pointer;
+	padding: 4px 8px;
+	border-radius: 6px;
+	transition: all 0.2s ease;
+	flex-shrink: 0;
+}
+
+.tuku-step-edit:hover {
+	color: #d81159;
+	background: rgba(216, 17, 89, 0.06);
+}
+
+.tuku-step-edit svg {
+	flex-shrink: 0;
+}
+
+/* Step summary (collapsed state) */
+.tuku-step-summary {
+	padding: 12px 0 0 46px;
+}
+
+.tuku-step-summary-text {
+	font-family: 'Poppins', sans-serif;
+	font-size: 14px;
+	color: #555;
+	line-height: 1.6;
+}
+
+.tuku-step-summary-text strong {
+	color: #1a1a1a;
+	font-weight: 600;
+}
+
+/* Step body (expanded form) */
+.tuku-step-body {
+	padding-top: 20px;
+	margin-top: 16px;
+	border-top: 1px solid #f0f0f0;
+}
+
+/* ---- Form Fields ---- */
+.tuku-form-row {
+	margin-bottom: 20px;
+}
+
+.tuku-form-row--2col {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
+}
+
+.tuku-form-field label {
+	display: block;
+	font-family: 'Poppins', sans-serif;
+	font-size: 13px;
+	font-weight: 500;
+	color: #323232;
+	margin-bottom: 6px;
+}
+
+.tuku-form-field label abbr.required {
+	color: #d81159;
+	text-decoration: none;
+}
+
+.tuku-form-field input[type="text"],
+.tuku-form-field input[type="email"],
+.tuku-form-field input[type="tel"],
+.tuku-form-field input[type="date"],
+.tuku-form-field .tuku-select {
+	width: 100%;
+	padding: 12px 14px;
+	font-family: 'Poppins', sans-serif;
+	font-size: 14px;
+	color: #323232;
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 10px;
+	outline: none;
+	transition: border-color 0.2s ease;
+	box-sizing: border-box;
+	-webkit-appearance: none;
+}
+
+.tuku-form-field input:focus,
+.tuku-form-field .tuku-select:focus {
+	border-color: #d81159;
+}
+
+.tuku-form-field input.tuku-input-error,
+.tuku-form-field select.tuku-input-error {
+	border-color: #e53e3e;
+}
+
+.tuku-form-field .tuku-select {
+	appearance: none;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 14px center;
+	padding-right: 36px;
+}
+
+/* Input group (select + input inline) */
+.tuku-input-group {
+	display: flex;
+	border: 1px solid #ddd;
+	border-radius: 10px;
+	overflow: hidden;
+	transition: border-color 0.2s ease;
+}
+
+.tuku-input-group:focus-within {
+	border-color: #d81159;
+}
+
+.tuku-input-group .tuku-select-inline {
+	border: none;
+	border-right: 1px solid #ddd;
+	border-radius: 0;
+	padding: 12px 10px;
+	font-family: 'Poppins', sans-serif;
+	font-size: 13px;
+	color: #323232;
+	background: #fafafa;
+	outline: none;
+	min-width: 85px;
+	-webkit-appearance: none;
+	appearance: none;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 8px center;
+	padding-right: 24px;
+}
+
+.tuku-input-group .tuku-phone-code {
+	min-width: 100px;
+}
+
+.tuku-input-group input {
+	flex: 1;
+	border: none !important;
+	border-radius: 0 !important;
+	padding: 12px 14px !important;
+	font-family: 'Poppins', sans-serif;
+	font-size: 14px;
+	outline: none;
+}
+
+/* ---- Step Actions ---- */
+.tuku-step-actions {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 12px;
+	margin-top: 24px;
+}
+
+.tuku-btn-next {
+	padding: 12px 32px;
+	background: #d81159;
+	color: #fff;
+	font-family: 'Poppins', sans-serif;
+	font-size: 15px;
+	font-weight: 600;
+	border: none;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: background 0.2s ease;
+}
+
+.tuku-btn-next:hover {
+	background: #b00e4a;
+}
+
+/* ---- Payment Step ---- */
+#tuku-payment-methods .woocommerce-checkout-payment {
+	background: transparent;
+	padding: 0;
+}
+
+#tuku-payment-methods .wc_payment_methods {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+#tuku-payment-methods .wc_payment_method {
+	background: #fff;
+	border: 2px solid #e0e0e0;
+	border-radius: 12px;
+	padding: 16px 20px;
+	margin-bottom: 12px;
+	transition: border-color 0.2s ease;
+}
+
+#tuku-payment-methods .wc_payment_method:has(input:checked) {
+	border-color: #d81159;
+}
+
+#tuku-payment-methods .wc_payment_method label {
+	font-family: 'Poppins', sans-serif;
+	font-size: 15px;
+	font-weight: 500;
+	color: #323232;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+#tuku-payment-methods .wc_payment_method .payment_method_title {
+	flex: 1;
+}
+
+#tuku-payment-methods .wc_payment_method label small,
+#tuku-payment-methods .wc_payment_method label .wc-payment-method-description {
+	display: block;
+	font-size: 12px;
+	font-weight: 400;
+	color: #888;
+	margin-top: 2px;
+}
+
+#tuku-payment-methods .wc_payment_method input[type="radio"] {
+	accent-color: #d81159;
+	width: 20px;
+	height: 20px;
+}
+
+#tuku-payment-methods .payment_box {
+	margin-top: 12px;
+	padding-top: 12px;
+	border-top: 1px solid #f0f0f0;
+	font-family: 'Poppins', sans-serif;
+	font-size: 13px;
+	color: #666;
+}
+
+#tuku-payment-methods .place-order {
+	display: none;
+}
+
+/* Bank info card */
+.tuku-bank-card {
+	background: #f9f9f9;
+	border: 1px solid #e8e8e8;
+	border-radius: 10px;
+	padding: 16px;
+	margin-top: 12px;
+}
+
+.tuku-bank-logo {
+	font-family: 'Poppins', sans-serif;
+	font-size: 14px;
+	font-weight: 700;
+	color: #1a1a1a;
+	margin-bottom: 10px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.tuku-bank-row {
+	padding: 4px 0;
+	font-family: 'Poppins', sans-serif;
+	font-size: 13px;
+}
+
+.tuku-bank-label {
+	color: #888;
+	display: block;
+	margin-bottom: 2px;
+}
+
+.tuku-bank-value {
+	color: #323232;
+	font-weight: 500;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.tuku-copy-btn {
+	background: none;
+	border: none;
+	color: #d81159;
+	cursor: pointer;
+	padding: 2px;
+	display: inline-flex;
+	align-items: center;
+}
+
+.tuku-copy-btn:hover {
+	opacity: 0.7;
+}
+
+/* Place order button */
+.tuku-place-order {
+	margin-top: 24px;
+}
+
+.tuku-btn-pay {
+	display: block;
+	width: 100%;
+	padding: 16px;
+	background: linear-gradient(135deg, #e8446d 0%, #c41054 100%);
+	color: #fff;
+	font-family: 'Poppins', sans-serif;
+	font-size: 16px;
+	font-weight: 600;
+	text-align: center;
+	border: none;
+	border-radius: 30px;
+	cursor: pointer;
+	transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.tuku-btn-pay:hover {
+	opacity: 0.9;
+	transform: translateY(-1px);
+}
+
+/* ---- Order Summary Sidebar ---- */
+.tuku-order-summary {
+	background: #fff;
+	border-radius: 16px;
+	padding: 24px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+	position: sticky;
+	top: 20px;
+}
+
+.tuku-order-summary__title {
+	font-family: 'Poppins', sans-serif;
+	font-size: 18px;
+	font-weight: 700;
+	color: #1a1a1a;
+	margin: 0 0 20px 0;
+}
+
+/* Order items */
+.tuku-order-item {
+	display: flex;
+	gap: 12px;
+	padding: 12px 0;
+	border-bottom: 1px solid #f0f0f0;
+}
+
+.tuku-order-item:last-child {
+	border-bottom: none;
+}
+
+.tuku-order-item__thumb {
+	flex-shrink: 0;
+	width: 60px;
+	height: 60px;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.tuku-order-item__thumb img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.tuku-order-item__info {
+	flex: 1;
+	min-width: 0;
+}
+
+.tuku-order-item__name {
+	font-family: 'Poppins', sans-serif;
+	font-size: 14px;
+	font-weight: 600;
+	color: #1a1a1a;
+	margin: 0 0 4px 0;
+	line-height: 1.3;
+}
+
+.tuku-order-item__meta {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	font-family: 'Poppins', sans-serif;
+	font-size: 12px;
+	color: #888;
+	margin-bottom: 2px;
+}
+
+.tuku-order-item__meta svg {
+	flex-shrink: 0;
+}
+
+.tuku-order-item__price {
+	font-family: 'Poppins', sans-serif;
+	font-size: 14px;
+	font-weight: 700;
+	color: #1a1a1a;
+	display: block;
+	margin-top: 4px;
+}
+
+/* Order totals */
+.tuku-order-totals {
+	padding-top: 16px;
+	border-top: 1px solid #f0f0f0;
+	margin-top: 4px;
+}
+
+.tuku-order-row {
+	display: flex;
+	justify-content: space-between;
+	font-family: 'Poppins', sans-serif;
+	font-size: 14px;
+	color: #555;
+	margin-bottom: 8px;
+}
+
+.tuku-order-discount {
+	color: #d81159;
+}
+
+.tuku-order-total {
+	display: flex;
+	justify-content: space-between;
+	font-family: 'Poppins', sans-serif;
+	font-size: 16px;
+	font-weight: 700;
+	color: #1a1a1a;
+	padding-top: 12px;
+	margin-top: 8px;
+	border-top: 1px solid #eee;
+}
+
+/* Terms checkbox */
+.tuku-checkout-terms {
+	margin-top: 20px;
+	padding-top: 16px;
+	border-top: 1px solid #f0f0f0;
+}
+
+.tuku-checkbox {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	cursor: pointer;
+	font-family: 'Poppins', sans-serif;
+	font-size: 13px;
+	color: #555;
+}
+
+.tuku-checkbox input[type="checkbox"] {
+	width: 18px;
+	height: 18px;
+	accent-color: #d81159;
+	flex-shrink: 0;
+	margin-top: 1px;
+}
+
+.tuku-checkbox-text a {
+	color: #d81159;
+	text-decoration: none;
+}
+
+.tuku-checkbox-text a:hover {
+	text-decoration: underline;
+}
+
+/* Policies */
+.tuku-checkout-policies {
+	margin-top: 20px;
+	padding-top: 16px;
+	border-top: 1px solid #f0f0f0;
+}
+
+.tuku-policy {
+	display: flex;
+	gap: 10px;
+	margin-bottom: 14px;
+}
+
+.tuku-policy:last-child {
+	margin-bottom: 0;
+}
+
+.tuku-policy svg {
+	flex-shrink: 0;
+	margin-top: 2px;
+}
+
+.tuku-policy strong {
+	font-family: 'Poppins', sans-serif;
+	font-size: 13px;
+	font-weight: 600;
+	color: #323232;
+	display: block;
+	margin-bottom: 2px;
+}
+
+.tuku-policy p {
+	font-family: 'Poppins', sans-serif;
+	font-size: 12px;
+	color: #888;
+	margin: 0;
+	line-height: 1.4;
+}
+
+/* ---- Checkout Responsive ---- */
+@media screen and (max-width: 991px) {
+	.tuku-checkout-layout {
+		grid-template-columns: 1fr;
+		gap: 24px;
+	}
+
+	.tuku-order-summary {
+		position: static;
+	}
+}
+
+@media screen and (max-width: 767px) {
+	.tuku-checkout-page {
+		padding: 20px 0 40px;
+	}
+
+	.tuku-checkout-title {
+		font-size: 18px;
+	}
+
+	.tuku-step-card {
+		padding: 20px 16px;
+		border-radius: 12px;
+		margin-bottom: 12px;
+	}
+
+	.tuku-step-heading {
+		font-size: 14px;
+	}
+
+	.tuku-step-num {
+		width: 28px;
+		height: 28px;
+		font-size: 12px;
+	}
+
+	.tuku-step-summary {
+		padding-left: 42px;
+	}
+
+	.tuku-step-summary-text {
+		font-size: 13px;
+	}
+
+	.tuku-form-row--2col {
+		grid-template-columns: 1fr;
+		gap: 12px;
+	}
+
+	.tuku-step-actions {
+		justify-content: stretch;
+	}
+
+	.tuku-btn-next {
+		width: 100%;
+		text-align: center;
+	}
+
+	.tuku-bank-row {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 2px;
+	}
+
+	.tuku-order-summary {
+		padding: 20px 16px;
+		border-radius: 12px;
+	}
+}
+
+/* Hide default WooCommerce checkout styles */
+.woocommerce-checkout .woocommerce-NoticeGroup,
+.woocommerce-checkout .woocommerce-error,
+.woocommerce-checkout .woocommerce-message,
+.woocommerce-checkout .woocommerce-info {
+	max-width: 100%;
+	margin-bottom: 16px;
+	font-family: 'Poppins', sans-serif;
+	border-radius: 10px;
+}

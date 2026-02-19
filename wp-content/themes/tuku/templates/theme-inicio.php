@@ -537,7 +537,13 @@ $wp_query = new WP_Query($args);
 																	<?php endif; ?>
 																	</div>
 																	<div class="card-product__right__action">
-																		<?php the_field( 'precio_tour' ); ?> <?php _e('US$','tuku') ?>
+																		<?php
+																		// Get WooCommerce price
+																		$product = wc_get_product(get_the_ID());
+																		if ($product) {
+																			echo esc_html($product->get_price());
+																		}
+																		?> <?php _e('US$','tuku') ?>
 																	</div>
 																	<div href="<?php the_permalink( ); ?>" class="card-product__right__action-hover">
 																		<?php _e('Ver tour','tuku') ?> <span class="icon-next"></span>

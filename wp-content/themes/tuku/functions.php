@@ -77,6 +77,9 @@ if ( ! function_exists( 'staff_digital_setup' ) ) :
 			'flex-width'  => true,
 			'flex-height' => true,
 		) );
+
+		// Add WooCommerce support
+		add_theme_support( 'woocommerce' );
 	}
 endif;
 add_action( 'after_setup_theme', 'staff_digital_setup' );
@@ -357,8 +360,8 @@ function dcms_enviar_contenido()
 
 	$arrIds = explode(',', str_replace(']', '', str_replace('[', '', str_replace('"', '', stripslashes($id_posts)))));
 
-	$args = array( 
-		'post_type' => 'tours', 
+	$args = array(
+		'post_type' => 'product',
 		'post_status' => 'publish',
 		'post__in' => $arrIds,
 		'posts_per_page' => -1,
@@ -444,8 +447,12 @@ function dcms_enviar_contenido()
 																						};
 																							$dataPrint .= '</div>
 																				<div class="card-product__right__action"> ';
-																				$dataPrint .= get_field( 'precio_tour' );
-																				$dataPrint .= 'US$';
+																				// Get WooCommerce price
+																				$product = wc_get_product($current_id);
+																				if ($product) {
+																					$dataPrint .= esc_html($product->get_price());
+																				}
+																				$dataPrint .= ' US$';
 																				$dataPrint .= '</div>
 																				<div class="card-product__right__action-hover"> ';
 																				if($currentlang=="es") {
@@ -573,7 +580,7 @@ function my_wp_nav_menu_objects( $items, $args ) {
 if (!is_admin()) {
 function wpb_search_filter($query) {
 if ($query->is_search) {
-$query->set('post_type', 'tours');
+$query->set('post_type', 'product');
 }
 return $query;
 }
@@ -784,7 +791,238 @@ document.addEventListener( 'wpcf7submit', function( event ) {
   
 <?php } 
   
-add_action('wp_footer', 'cf7_footer_script'); 
+add_action('wp_footer', 'cf7_footer_script');
 
+/**
+ * WooCommerce content wrappers
+ */
+remove_action( 'woocommerce_before_main_content', 'woocommerce_output_content_wrapper', 10 );
+remove_action( 'woocommerce_after_main_content', 'woocommerce_output_content_wrapper_end', 10 );
 
-?>
+function tuku_woocommerce_wrapper_before() {
+    echo '<main id="primary" class="site-main">';
+}
+add_action( 'woocommerce_before_main_content', 'tuku_woocommerce_wrapper_before' );
+
+function tuku_woocommerce_wrapper_after() {
+    echo '</main>';
+}
+add_action( 'woocommerce_after_main_content', 'tuku_woocommerce_wrapper_after' );
+
+/**
+ * Register Tours taxonomies for WooCommerce Products
+ * This allows the taxonomies that were previously used with 'tours' post type
+ * to also work with 'product' post type (WooCommerce)
+ */
+function register_tours_taxonomies_for_products() {
+    // Register 'itinerarios' taxonomy for products
+    register_taxonomy_for_object_type('itinerarios', 'product');
+
+    // Register 'destinos' taxonomy for products
+    register_taxonomy_for_object_type('destinos', 'product');
+
+    // Register 'duracion' taxonomy for products
+    register_taxonomy_for_object_type('duracion', 'product');
+
+    // Register 'seguridad' taxonomy for products
+    register_taxonomy_for_object_type('seguridad', 'product');
+}
+add_action('init', 'register_tours_taxonomies_for_products', 999);
+
+/**
+ * Auto-create WooCommerce pages if they don't exist
+ */
+function tuku_ensure_wc_pages() {
+    if ( ! class_exists( 'WooCommerce' ) ) return;
+
+    $pages = [
+        'cart'     => [ 'title' => 'Carrito',  'content' => '[woocommerce_cart]',     'option' => 'woocommerce_cart_page_id' ],
+        'checkout' => [ 'title' => 'Checkout', 'content' => '[woocommerce_checkout]', 'option' => 'woocommerce_checkout_page_id' ],
+        'myaccount'=> [ 'title' => 'Mi cuenta','content' => '[woocommerce_my_account]','option' => 'woocommerce_myaccount_page_id' ],
+    ];
+
+    foreach ( $pages as $slug => $page ) {
+        $page_id = get_option( $page['option'] );
+        if ( $page_id && get_post_status( $page_id ) === 'publish' ) continue;
+
+        $existing = get_page_by_path( $slug );
+        if ( $existing && $existing->post_status === 'publish' ) {
+            update_option( $page['option'], $existing->ID );
+            continue;
+        }
+
+        $new_id = wp_insert_post([
+            'post_title'   => $page['title'],
+            'post_name'    => $slug,
+            'post_content' => $page['content'],
+            'post_status'  => 'publish',
+            'post_type'    => 'page',
+        ]);
+        if ( $new_id && ! is_wp_error( $new_id ) ) {
+            update_option( $page['option'], $new_id );
+        }
+    }
+}
+add_action( 'after_setup_theme', 'tuku_ensure_wc_pages' );
+
+/**
+ * WooCommerce: Update header cart count via AJAX fragments
+ */
+function tuku_cart_count_fragment( $fragments ) {
+    $count = WC()->cart->get_cart_contents_count();
+    $fragments['.cart-count'] = '<span class="cart-count ' . ( $count ? '' : 'hidden' ) . '">' . $count . '</span>';
+    return $fragments;
+}
+add_filter( 'woocommerce_add_to_cart_fragments', 'tuku_cart_count_fragment' );
+
+/**
+ * WooCommerce: Save tour dates and guests to cart item
+ */
+function tuku_add_cart_item_data( $cart_item_data, $product_id ) {
+    if ( ! empty( $_POST['tuku_start_date'] ) ) {
+        $cart_item_data['tuku_start_date'] = sanitize_text_field( $_POST['tuku_start_date'] );
+    }
+    if ( ! empty( $_POST['tuku_end_date'] ) ) {
+        $cart_item_data['tuku_end_date'] = sanitize_text_field( $_POST['tuku_end_date'] );
+    }
+    if ( ! empty( $_POST['tuku_guests'] ) ) {
+        $cart_item_data['tuku_guests'] = absint( $_POST['tuku_guests'] );
+    }
+    return $cart_item_data;
+}
+add_filter( 'woocommerce_add_cart_item_data', 'tuku_add_cart_item_data', 10, 2 );
+
+/**
+ * WooCommerce: Display tour dates and guests in cart
+ */
+function tuku_get_item_data( $item_data, $cart_item ) {
+    if ( ! empty( $cart_item['tuku_start_date'] ) ) {
+        $label = __( 'Fecha inicio', 'tuku' );
+        $value = date_i18n( 'D, j M Y', strtotime( $cart_item['tuku_start_date'] ) );
+        if ( ! empty( $cart_item['tuku_end_date'] ) ) {
+            $label = __( 'Fechas', 'tuku' );
+            $value .= ' – ' . date_i18n( 'D, j M Y', strtotime( $cart_item['tuku_end_date'] ) );
+        }
+        $item_data[] = [
+            'key'   => $label,
+            'value' => $value,
+        ];
+    }
+    if ( ! empty( $cart_item['tuku_guests'] ) && $cart_item['tuku_guests'] > 0 ) {
+        $item_data[] = [
+            'key'   => __( 'Viajeros', 'tuku' ),
+            'value' => $cart_item['tuku_guests'],
+        ];
+    }
+    return $item_data;
+}
+add_filter( 'woocommerce_get_item_data', 'tuku_get_item_data', 10, 2 );
+
+/**
+ * WooCommerce: Save tour data to order item meta
+ */
+function tuku_checkout_create_order_line_item( $item, $cart_item_key, $values, $order ) {
+    if ( ! empty( $values['tuku_start_date'] ) ) {
+        $item->add_meta_data( __( 'Fecha inicio', 'tuku' ), $values['tuku_start_date'] );
+    }
+    if ( ! empty( $values['tuku_end_date'] ) ) {
+        $item->add_meta_data( __( 'Fecha fin', 'tuku' ), $values['tuku_end_date'] );
+    }
+    if ( ! empty( $values['tuku_guests'] ) ) {
+        $item->add_meta_data( __( 'Viajeros', 'tuku' ), $values['tuku_guests'] );
+    }
+}
+add_action( 'woocommerce_checkout_create_order_line_item', 'tuku_checkout_create_order_line_item', 10, 4 );
+
+/**
+ * WooCommerce Checkout: Override default fields
+ */
+function tuku_override_checkout_fields( $fields ) {
+    // Remove fields we handle manually in our template
+    unset( $fields['billing']['billing_company'] );
+    unset( $fields['billing']['billing_address_1'] );
+    unset( $fields['billing']['billing_address_2'] );
+    unset( $fields['billing']['billing_city'] );
+    unset( $fields['billing']['billing_postcode'] );
+    unset( $fields['billing']['billing_state'] );
+    unset( $fields['order']['order_comments'] );
+
+    // Make sure required fields are set
+    $fields['billing']['billing_first_name']['required'] = true;
+    $fields['billing']['billing_last_name']['required'] = true;
+    $fields['billing']['billing_email']['required'] = true;
+    $fields['billing']['billing_phone']['required'] = true;
+    $fields['billing']['billing_country']['required'] = true;
+
+    return $fields;
+}
+add_filter( 'woocommerce_checkout_fields', 'tuku_override_checkout_fields' );
+
+/**
+ * WooCommerce Checkout: Validate custom fields
+ */
+function tuku_checkout_validate_fields() {
+    if ( empty( $_POST['tuku_doc_number'] ) ) {
+        wc_add_notice( __( 'Por favor ingresa tu número de documento.', 'tuku' ), 'error' );
+    }
+    if ( empty( $_POST['tuku_birthdate'] ) ) {
+        wc_add_notice( __( 'Por favor ingresa tu fecha de nacimiento.', 'tuku' ), 'error' );
+    }
+    if ( empty( $_POST['tuku_gender'] ) ) {
+        wc_add_notice( __( 'Por favor selecciona tu género.', 'tuku' ), 'error' );
+    }
+    if ( ! empty( $_POST['billing_email'] ) && ! empty( $_POST['billing_email_confirm'] ) ) {
+        if ( $_POST['billing_email'] !== $_POST['billing_email_confirm'] ) {
+            wc_add_notice( __( 'Los correos electrónicos no coinciden.', 'tuku' ), 'error' );
+        }
+    }
+}
+add_action( 'woocommerce_checkout_process', 'tuku_checkout_validate_fields' );
+
+/**
+ * WooCommerce Checkout: Save custom fields to order meta
+ */
+function tuku_checkout_save_order_meta( $order_id ) {
+    if ( ! empty( $_POST['tuku_doc_type'] ) ) {
+        update_post_meta( $order_id, '_tuku_doc_type', sanitize_text_field( $_POST['tuku_doc_type'] ) );
+    }
+    if ( ! empty( $_POST['tuku_doc_number'] ) ) {
+        update_post_meta( $order_id, '_tuku_doc_number', sanitize_text_field( $_POST['tuku_doc_number'] ) );
+    }
+    if ( ! empty( $_POST['tuku_birthdate'] ) ) {
+        update_post_meta( $order_id, '_tuku_birthdate', sanitize_text_field( $_POST['tuku_birthdate'] ) );
+    }
+    if ( ! empty( $_POST['tuku_gender'] ) ) {
+        update_post_meta( $order_id, '_tuku_gender', sanitize_text_field( $_POST['tuku_gender'] ) );
+    }
+    if ( ! empty( $_POST['tuku_phone_code'] ) ) {
+        update_post_meta( $order_id, '_tuku_phone_code', sanitize_text_field( $_POST['tuku_phone_code'] ) );
+    }
+}
+add_action( 'woocommerce_checkout_update_order_meta', 'tuku_checkout_save_order_meta' );
+
+/**
+ * WooCommerce Admin: Display custom fields on order page
+ */
+function tuku_admin_order_data( $order ) {
+    $order_id = $order->get_id();
+    $doc_type   = get_post_meta( $order_id, '_tuku_doc_type', true );
+    $doc_number = get_post_meta( $order_id, '_tuku_doc_number', true );
+    $birthdate  = get_post_meta( $order_id, '_tuku_birthdate', true );
+    $gender     = get_post_meta( $order_id, '_tuku_gender', true );
+    $phone_code = get_post_meta( $order_id, '_tuku_phone_code', true );
+
+    if ( $doc_type || $doc_number ) {
+        echo '<p><strong>' . __( 'Documento', 'tuku' ) . ':</strong> ' . esc_html( $doc_type . ' ' . $doc_number ) . '</p>';
+    }
+    if ( $birthdate ) {
+        echo '<p><strong>' . __( 'Fecha de nacimiento', 'tuku' ) . ':</strong> ' . esc_html( $birthdate ) . '</p>';
+    }
+    if ( $gender ) {
+        echo '<p><strong>' . __( 'Género', 'tuku' ) . ':</strong> ' . esc_html( ucfirst( $gender ) ) . '</p>';
+    }
+    if ( $phone_code ) {
+        echo '<p><strong>' . __( 'Código telefónico', 'tuku' ) . ':</strong> ' . esc_html( $phone_code ) . '</p>';
+    }
+}
+add_action( 'woocommerce_admin_order_data_after_billing_address', 'tuku_admin_order_data' );

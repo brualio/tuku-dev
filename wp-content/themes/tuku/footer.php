@@ -129,8 +129,8 @@
         <div class="modal__content">
             <div class="modal__close"><span class="icon-close-11"></span></div>
             <div class="modal__header">
-                <?php 
-                if ( is_singular( 'tours' ) ) {
+                <?php
+                if ( is_singular( 'product' ) ) {
                      echo '<div class="modal__title">';
                      echo ''. the_title().'';
                      echo '</div>';
@@ -367,7 +367,9 @@
             </svg>
         </div>
     </div>
+<?php if ( ! str_contains( $_SERVER['HTTP_HOST'] ?? '', '.local' ) ) : ?>
   <script type="text/javascript" id="hs-script-loader" async defer src="//js-na1.hs-scripts.com/22272769.js"></script>
+<?php endif; ?>
 
 
 <?php wp_footer(); ?>
@@ -513,6 +515,7 @@ if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(naviga
 </script>
 
 </div>
+<?php if ( ! str_contains( $_SERVER['HTTP_HOST'] ?? '', '.local' ) ) : ?>
 <!-- Código de instalación Cliengo para  https://tukutravel.com/ -->
 <script type="text/javascript">(function () {
     var ldk = document.createElement('script');
@@ -522,6 +525,7 @@ if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(naviga
     var s = document.getElementsByTagName('script')[0];
     s.parentNode.insertBefore(ldk, s);
 })();</script>
+<?php endif; ?>
 
 </body>
 </html>
