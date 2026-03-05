@@ -793,6 +793,64 @@ document.addEventListener( 'wpcf7submit', function( event ) {
   
 add_action('wp_footer', 'cf7_footer_script');
 
+/*
+|--------------------------------------------------------------------------
+| Custom Post Types
+|--------------------------------------------------------------------------
+*/
+
+register_post_type('slider', [
+	'labels' => [
+		'name'          => 'Sliders',
+		'singular_name' => 'Slider',
+	],
+	'public'       => true,
+	'has_archive'  => true,
+	'menu_icon'    => 'dashicons-format-gallery',
+	'supports'     => ['title'],
+	'rewrite'      => ['slug' => 'slider'],
+	'show_in_rest' => true,
+]);
+
+/*
+|--------------------------------------------------------------------------
+| Custom Taxonomies (ONLY custom ones)
+|--------------------------------------------------------------------------
+*/
+
+$custom_taxonomies = [
+	'itinerarios' => 'Itinerario',
+	'destinos'    => 'Destino',
+	'duracion'    => 'Duración',
+	'seguridad'   => 'Seguridad',
+];
+
+foreach ($custom_taxonomies as $slug => $label) {
+
+	register_taxonomy($slug, ['product'], [
+		'labels'       => [
+			'name'          => $label,
+			'singular_name' => $label,
+		],
+		'public'       => true,
+		'hierarchical' => true,
+		'rewrite'      => [
+			'slug'         => $slug,
+			'hierarchical' => true,
+		],
+		'show_in_rest' => true,
+	]);
+}
+
+/*
+|--------------------------------------------------------------------------
+| Attach EXISTING core taxonomies
+|--------------------------------------------------------------------------
+*/
+
+register_taxonomy_for_object_type('category', 'product');
+register_taxonomy_for_object_type('post_tag', 'product');
+
 /**
  * WooCommerce content wrappers
  */

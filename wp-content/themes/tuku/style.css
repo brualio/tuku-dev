@@ -1723,6 +1723,63 @@ color: rgba(56, 55, 55, 0.6);
 	background: #b00e4a;
 }
 
+.tuku-btn-prev-traveler {
+	margin-right: auto;
+	padding: 12px 24px;
+	background: transparent;
+	color: #d81159;
+	font-family: 'Poppins', sans-serif;
+	font-size: 15px;
+	font-weight: 600;
+	border: 2px solid #d81159;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: background 0.2s ease, color 0.2s ease;
+}
+
+.tuku-btn-prev-traveler:hover {
+	background: #fde8ed;
+}
+
+/* ---- Admin demo bar ---- */
+.tuku-demo-bar {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-top: 16px;
+	padding: 10px 14px;
+	background: #fff8e1;
+	border: 1px dashed #f9a825;
+	border-radius: 8px;
+}
+
+.tuku-demo-bar__label {
+	font-size: 11px;
+	font-weight: 700;
+	color: #f57f17;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	white-space: nowrap;
+}
+
+.tuku-demo-bar #tuku-demo-fill {
+	flex: 1;
+	padding: 7px 14px;
+	background: #f9a825;
+	color: #fff;
+	font-family: 'Poppins', sans-serif;
+	font-size: 13px;
+	font-weight: 600;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background 0.2s ease;
+}
+
+.tuku-demo-bar #tuku-demo-fill:hover {
+	background: #f57f17;
+}
+
 /* ---- Payment Step ---- */
 #tuku-payment-methods .woocommerce-checkout-payment {
 	background: transparent;

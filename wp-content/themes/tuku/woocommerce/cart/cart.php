@@ -217,4 +217,169 @@ get_header();
 
 <?php
 do_action( 'woocommerce_after_cart' );
-get_footer();
+
+// Tours relacionados basados en los productos del carrito
+$cart_product_ids = array();
+$cart_categories  = array();
+foreach ( WC()->cart->get_cart() as $cart_item ) {
+    $cart_product_ids[] = $cart_item['product_id'];
+    $terms = wp_get_object_terms( $cart_item['product_id'], 'destinos', array( 'fields' => 'ids' ) );
+    if ( ! is_wp_error( $terms ) ) {
+        $cart_categories = array_merge( $cart_categories, $terms );
+    }
+}
+$cart_categories = array_unique( $cart_categories );
+
+$args = array(
+    'post_type'      => 'product',
+    'post_status'    => 'publish',
+    'posts_per_page' => 8,
+    'orderby'        => 'rand',
+    'tax_query'      => array(
+        array(
+            'taxonomy' => 'destinos',
+            'field'    => 'id',
+            'terms'    => $cart_categories,
+        ),
+    ),
+    'post__not_in'   => $cart_product_ids,
+);
+$related_items_by_category = new WP_Query( $args );
+if ( $related_items_by_category->have_posts() ) : ?>
+    <section class="related__tours">
+      <div class="container">
+        <h1><?php _e( 'También podría interesarte estos tours relacionados', 'tuku' ) ?></h1>
+        <div class="popular-home__content">
+          <div class="swiper-container swiper-container-popular-home">
+            <div class="swiper-wrapper">
+
+                <?php while ( $related_items_by_category->have_posts() ) : $related_items_by_category->the_post(); ?>
+                    <?php
+                    $current_id = get_the_ID();
+
+                    // Get WooCommerce price
+                    $related_price   = '';
+                    $related_product = wc_get_product( $current_id );
+                    if ( $related_product ) {
+                        $related_price = $related_product->get_price();
+                    }
+                    ?>
+                  <div class="swiper-slide">
+                    <a href="<?php the_permalink(); ?>" class="card-product whislist" data-product="<?php echo $current_id ?>">
+                      <div class="card-product__left">
+                        <?php the_post_thumbnail( 'thumbnail-tour' ); ?>
+
+                        <div class="card-product__left__top">
+                            <?php
+                                $tax   = 'itinerarios';
+                                $iargs = array( 'hide_empty' => false );
+                                $iterms = get_terms( $tax, $iargs );
+                                foreach ( $iterms as $term ) {
+                                    $image = get_field( 'icono_iti', 'itinerarios_' . $term->term_id );
+                                    if ( $term->count > 0 ) {
+                                        echo '<div class="card-product__left__top__item">';
+                                        echo '<img src="' . $image['url'] . '" alt="' . $image['alt'] . '">';
+                                        echo '</div>';
+                                    }
+                                }
+                            ?>
+                        </div>
+
+                        <div class="card-product__left__bottom">
+                          <span class="card-product__heart">
+                            <span class="icon-heart-11"></span>
+                            <span class="icon-heart3"></span>
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="card-product__right">
+                        <div class="card-product__right__content">
+                          <div class="card-product__right__content__top">
+                            <div class="card-product__right__title">
+                              <?php the_title(); ?>
+                            </div>
+                            <div class="card-product__right__direction">
+                                <div class="icon"><span class="icon-pin"></span></div>
+                                <?php
+                                    $dterms = get_the_terms( $current_id, 'destinos' );
+                                    if ( $dterms ) {
+                                        foreach ( $dterms as $dterm ) {
+                                            echo esc_html( $dterm->name );
+                                            unset( $dterm );
+                                        }
+                                    }
+                                ?>
+                            </div>
+                            <div class="card-product__right__desc">
+                              Authoritatively customize collaborative testing procedures and timely leadership skills. Appropriately aggregate pandemic internal or "organic".
+                            </div>
+                          </div>
+                          <div class="card-product__right__content__bottom">
+                            <div class="card-product__right__content__bottom__list">
+                                <?php if ( get_field( 'numero_de_dias' ) ) : ?>
+                                    <div class="card-product__right__content__bottom__item">
+                                        <span class="icon-clock"></span>
+                                        <span class="card-product__right__content__bottom__item__name">
+                                            <?php the_field( 'numero_de_dias' ); ?>d
+                                        </span>
+                                    </div>
+                                <?php endif; ?>
+                                <?php if ( have_rows( 'comentarios' ) ) : ?>
+                                    <div class="card-product__right__content__bottom__item">
+                                        <span class="icon-conversation"></span>
+                                        <span class="card-product__right__content__bottom__item__name">
+                                            <?php echo count( get_field( 'comentarios' ) ); ?>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                              </div>
+                              <div class="card-product__right__action">
+                                <?php echo esc_html( $related_price ); ?> <?php _e( 'US$', 'tuku' ) ?>
+                              </div>
+                              <div href="<?php the_permalink(); ?>" class="card-product__right__action-hover">
+                                <?php _e( 'Ver tour', 'tuku' ) ?> <span class="icon-next"></span>
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+                    </a>
+                  </div>
+                <?php endwhile; ?>
+
+            </div>
+          </div>
+        </div>
+        <div class="next-slide-car">
+          <span class="icon-next"></span>
+        </div>
+        <div class="prev-slide-car">
+          <span class="icon-prev"></span>
+        </div>
+      </div>
+    </section>
+<?php
+    endif;
+    wp_reset_postdata();
+?>
+
+<script>
+    jQuery(document).ready(function() {
+        new Swiper('.swiper-container-popular-home', {
+            slidesPerView: 1,
+            spaceBetween: 40,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            breakpoints: {
+                640: { slidesPerView: 2 },
+                768: { slidesPerView: 2 },
+                1024: { slidesPerView: 3 },
+                1120: { slidesPerView: 4 }
+            }
+        });
+    });
+</script>
+
+<?php get_footer();

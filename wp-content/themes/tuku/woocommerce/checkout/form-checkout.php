@@ -19,8 +19,74 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
     return;
 }
 
+// Calculate total guests from cart
+$total_guests = 0;
+foreach ( WC()->cart->get_cart() as $cart_item ) {
+    $g = ! empty( $cart_item['tuku_guests'] ) ? (int) $cart_item['tuku_guests'] : (int) $cart_item['quantity'];
+    $total_guests += $g;
+}
+if ( $total_guests < 1 ) $total_guests = 1;
+
+$countries = WC()->countries->get_countries();
+
 get_header();
 ?>
+
+<style>
+.tuku-travelers-slider {
+    overflow: hidden;
+    position: relative;
+}
+.tuku-travelers-track {
+    display: flex;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+.tuku-traveler-slide {
+    flex: 0 0 100%;
+    min-width: 100%;
+}
+.tuku-traveler-label {
+    margin-bottom: 16px;
+}
+.tuku-traveler-label strong {
+    display: block;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+.tuku-traveler-sublabel {
+    font-size: 13px;
+    color: #666;
+    margin: 0;
+}
+.tuku-doc-warning {
+    margin-top: 10px;
+    background: #fde8ed;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #333;
+    line-height: 1.5;
+}
+.tuku-traveler-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+.tuku-traveler-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ddd;
+    transition: background 0.2s;
+    cursor: default;
+}
+.tuku-traveler-dot.active {
+    background: #d6246e;
+}
+</style>
 
 <section class="tuku-checkout-page">
     <div class="container">
@@ -35,7 +101,7 @@ get_header();
                 <!-- LEFT: Stacked Steps -->
                 <div class="tuku-checkout-steps">
 
-                    <!-- ============ STEP 1: Traveler ============ -->
+                    <!-- ============ STEP 1: Travelers ============ -->
                     <div class="tuku-step-card active" data-step="1">
                         <div class="tuku-step-header">
                             <span class="tuku-step-num">1</span>
@@ -51,67 +117,112 @@ get_header();
                             <div class="tuku-step-summary-text" id="summary-1"></div>
                         </div>
 
-                        <!-- Form (shown when active) -->
+                        <!-- Traveler slider -->
                         <div class="tuku-step-body">
-                            <div class="tuku-form-row tuku-form-row--2col">
-                                <div class="tuku-form-field">
-                                    <label for="tuku_first_name"><?php _e( 'Nombres', 'tuku' ); ?> <abbr class="required">*</abbr></label>
-                                    <input type="text" id="tuku_first_name" name="billing_first_name" placeholder="<?php esc_attr_e( 'Ej: Juan Carlos', 'tuku' ); ?>" required value="<?php echo esc_attr( $checkout->get_value( 'billing_first_name' ) ); ?>">
-                                </div>
-                                <div class="tuku-form-field">
-                                    <label for="tuku_last_name"><?php _e( 'Apellidos', 'tuku' ); ?> <abbr class="required">*</abbr></label>
-                                    <input type="text" id="tuku_last_name" name="billing_last_name" placeholder="<?php esc_attr_e( 'Ej: Pérez López', 'tuku' ); ?>" required value="<?php echo esc_attr( $checkout->get_value( 'billing_last_name' ) ); ?>">
-                                </div>
-                            </div>
+                            <div class="tuku-travelers-slider" id="tuku-travelers-slider">
+                                <div class="tuku-travelers-track" id="tuku-travelers-track">
 
-                            <div class="tuku-form-row tuku-form-row--2col">
-                                <div class="tuku-form-field">
-                                    <label for="tuku_doc_type"><?php _e( 'Documento de identidad', 'tuku' ); ?> <abbr class="required">*</abbr></label>
-                                    <div class="tuku-input-group">
-                                        <select id="tuku_doc_type" name="tuku_doc_type" class="tuku-select-inline">
-                                            <option value="DNI">DNI</option>
-                                            <option value="Pasaporte"><?php _e( 'Pasaporte', 'tuku' ); ?></option>
-                                            <option value="CE"><?php _e( 'CE', 'tuku' ); ?></option>
-                                        </select>
-                                        <input type="text" id="tuku_doc_number" name="tuku_doc_number" placeholder="<?php esc_attr_e( 'N° de documento', 'tuku' ); ?>" required>
+                                    <?php for ( $t = 0; $t < $total_guests; $t++ ) :
+                                        $is_first = ( $t === 0 );
+                                        $is_last  = ( $t === $total_guests - 1 );
+                                        $sid      = $t === 0 ? '' : '_' . $t;
+
+                                        // Field names: traveler 0 uses WC billing fields for compatibility
+                                        $fn_first  = $t === 0 ? 'billing_first_name'  : "tuku_travelers[{$t}][first_name]";
+                                        $fn_last   = $t === 0 ? 'billing_last_name'   : "tuku_travelers[{$t}][last_name]";
+                                        $fn_doc    = $t === 0 ? 'tuku_doc_type'       : "tuku_travelers[{$t}][doc_type]";
+                                        $fn_docnum = $t === 0 ? 'tuku_doc_number'     : "tuku_travelers[{$t}][doc_number]";
+                                        $fn_ctry   = $t === 0 ? 'billing_country'     : "tuku_travelers[{$t}][country]";
+                                        $fn_birth  = $t === 0 ? 'tuku_birthdate'      : "tuku_travelers[{$t}][birthdate]";
+                                        $fn_gender = $t === 0 ? 'tuku_gender'         : "tuku_travelers[{$t}][gender]";
+
+                                        $default_country = $is_first ? ( $checkout->get_value( 'billing_country' ) ?: 'PE' ) : 'PE';
+                                    ?>
+                                    <div class="tuku-traveler-slide" data-traveler="<?php echo $t; ?>">
+                                        <div class="tuku-traveler-label">
+                                            <strong><?php printf( __( 'Adulto %d', 'tuku' ), $t + 1 ); ?></strong>
+                                            <?php if ( $is_first ) : ?>
+                                            <p class="tuku-traveler-sublabel"><?php _e( 'Será responsable de hacer el check-in y el check-out en el alojamiento', 'tuku' ); ?></p>
+                                            <?php endif; ?>
+                                        </div>
+
+                                        <div class="tuku-form-row tuku-form-row--2col">
+                                            <div class="tuku-form-field">
+                                                <label><?php _e( 'Nombres', 'tuku' ); ?> <abbr class="required">*</abbr></label>
+                                                <input type="text" id="tuku_first_name<?php echo $sid; ?>" name="<?php echo esc_attr( $fn_first ); ?>" placeholder="<?php esc_attr_e( 'Ej: Juan Carlos', 'tuku' ); ?>" required value="<?php echo $is_first ? esc_attr( $checkout->get_value( 'billing_first_name' ) ) : ''; ?>">
+                                            </div>
+                                            <div class="tuku-form-field">
+                                                <label><?php _e( 'Apellidos', 'tuku' ); ?> <abbr class="required">*</abbr></label>
+                                                <input type="text" id="tuku_last_name<?php echo $sid; ?>" name="<?php echo esc_attr( $fn_last ); ?>" placeholder="<?php esc_attr_e( 'Ej: Pérez López', 'tuku' ); ?>" required value="<?php echo $is_first ? esc_attr( $checkout->get_value( 'billing_last_name' ) ) : ''; ?>">
+                                            </div>
+                                        </div>
+
+                                        <div class="tuku-form-row tuku-form-row--2col">
+                                            <div class="tuku-form-field">
+                                                <label><?php _e( 'Documento de identidad', 'tuku' ); ?> <abbr class="required">*</abbr></label>
+                                                <div class="tuku-input-group">
+                                                    <select id="tuku_doc_type<?php echo $sid; ?>" name="<?php echo esc_attr( $fn_doc ); ?>" class="tuku-select-inline tuku-doc-type-select">
+                                                        <option value="DNI">DNI</option>
+                                                        <option value="Pasaporte"><?php _e( 'Pasaporte', 'tuku' ); ?></option>
+                                                        <option value="CE"><?php _e( 'CE', 'tuku' ); ?></option>
+                                                    </select>
+                                                    <input type="text" id="tuku_doc_number<?php echo $sid; ?>" name="<?php echo esc_attr( $fn_docnum ); ?>" placeholder="<?php esc_attr_e( 'N° de documento', 'tuku' ); ?>" required>
+                                                </div>
+                                                <div class="tuku-doc-warning" style="display:none;">
+                                                    <?php _e( 'Algunas actividades seleccionadas tienen un incremento de precio. Si tienes dudas porfavor contactate al +51 966461384', 'tuku' ); ?>
+                                                </div>
+                                            </div>
+                                            <div class="tuku-form-field">
+                                                <label><?php _e( 'País de residencia', 'tuku' ); ?> <abbr class="required">*</abbr></label>
+                                                <select id="billing_country<?php echo $sid; ?>" name="<?php echo esc_attr( $fn_ctry ); ?>" class="tuku-select" required>
+                                                    <option value=""><?php _e( 'Seleccionar país', 'tuku' ); ?></option>
+                                                    <?php foreach ( $countries as $code => $name ) : ?>
+                                                        <option value="<?php echo esc_attr( $code ); ?>" <?php selected( $default_country, $code ); ?>><?php echo esc_html( $name ); ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="tuku-form-row tuku-form-row--2col">
+                                            <div class="tuku-form-field">
+                                                <label><?php _e( 'Fecha de nacimiento', 'tuku' ); ?> <abbr class="required">*</abbr></label>
+                                                <input type="date" id="tuku_birthdate<?php echo $sid; ?>" name="<?php echo esc_attr( $fn_birth ); ?>" required>
+                                            </div>
+                                            <div class="tuku-form-field">
+                                                <label><?php _e( 'Género', 'tuku' ); ?> <abbr class="required">*</abbr></label>
+                                                <select id="tuku_gender<?php echo $sid; ?>" name="<?php echo esc_attr( $fn_gender ); ?>" class="tuku-select" required>
+                                                    <option value=""><?php _e( 'Seleccionar', 'tuku' ); ?></option>
+                                                    <option value="Masculino"><?php _e( 'Masculino', 'tuku' ); ?></option>
+                                                    <option value="Femenino"><?php _e( 'Femenino', 'tuku' ); ?></option>
+                                                    <option value="Otro"><?php _e( 'Otro', 'tuku' ); ?></option>
+                                                    <option value="Prefiero no decir"><?php _e( 'Prefiero no decir', 'tuku' ); ?></option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="tuku-step-actions">
+                                            <?php if ( ! $is_first ) : ?>
+                                            <button type="button" class="tuku-btn-prev-traveler" data-traveler-prev="<?php echo $t - 1; ?>"><?php _e( 'Anterior', 'tuku' ); ?></button>
+                                            <?php endif; ?>
+                                            <?php if ( ! $is_last ) : ?>
+                                            <button type="button" class="tuku-btn-next tuku-btn-next-traveler" data-traveler-next="<?php echo $t + 1; ?>"><?php _e( 'Siguiente', 'tuku' ); ?></button>
+                                            <?php else : ?>
+                                            <button type="button" class="tuku-btn-next tuku-btn-next-step" data-next="2"><?php _e( 'Siguiente', 'tuku' ); ?></button>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="tuku-form-field">
-                                    <label for="billing_country"><?php _e( 'País de residencia', 'tuku' ); ?> <abbr class="required">*</abbr></label>
-                                    <select id="billing_country" name="billing_country" class="tuku-select" required>
-                                        <option value=""><?php _e( 'Seleccionar país', 'tuku' ); ?></option>
-                                        <?php
-                                        $countries = WC()->countries->get_countries();
-                                        $current_country = $checkout->get_value( 'billing_country' );
-                                        if ( ! $current_country ) $current_country = 'PE';
-                                        foreach ( $countries as $code => $name ) :
-                                        ?>
-                                            <option value="<?php echo esc_attr( $code ); ?>" <?php selected( $current_country, $code ); ?>><?php echo esc_html( $name ); ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                            </div>
+                                    <?php endfor; ?>
 
-                            <div class="tuku-form-row tuku-form-row--2col">
-                                <div class="tuku-form-field">
-                                    <label for="tuku_birthdate"><?php _e( 'Fecha de nacimiento', 'tuku' ); ?> <abbr class="required">*</abbr></label>
-                                    <input type="date" id="tuku_birthdate" name="tuku_birthdate" required>
-                                </div>
-                                <div class="tuku-form-field">
-                                    <label for="tuku_gender"><?php _e( 'Género', 'tuku' ); ?> <abbr class="required">*</abbr></label>
-                                    <select id="tuku_gender" name="tuku_gender" class="tuku-select" required>
-                                        <option value=""><?php _e( 'Seleccionar', 'tuku' ); ?></option>
-                                        <option value="Masculino"><?php _e( 'Masculino', 'tuku' ); ?></option>
-                                        <option value="Femenino"><?php _e( 'Femenino', 'tuku' ); ?></option>
-                                        <option value="Otro"><?php _e( 'Otro', 'tuku' ); ?></option>
-                                        <option value="Prefiero no decir"><?php _e( 'Prefiero no decir', 'tuku' ); ?></option>
-                                    </select>
-                                </div>
-                            </div>
+                                </div><!-- .tuku-travelers-track -->
+                            </div><!-- .tuku-travelers-slider -->
 
-                            <div class="tuku-step-actions">
-                                <button type="button" class="tuku-btn-next" data-next="2"><?php _e( 'Siguiente', 'tuku' ); ?></button>
+                            <?php if ( $total_guests > 1 ) : ?>
+                            <div class="tuku-traveler-dots" id="tuku-traveler-dots">
+                                <?php for ( $t = 0; $t < $total_guests; $t++ ) : ?>
+                                <span class="tuku-traveler-dot<?php echo $t === 0 ? ' active' : ''; ?>" data-traveler="<?php echo $t; ?>"></span>
+                                <?php endfor; ?>
                             </div>
+                            <?php endif; ?>
                         </div>
                     </div>
 
@@ -295,7 +406,7 @@ get_header();
                             <?php endforeach; ?>
                         </div>
 
-                        <div class="tuku-order-totals">
+                        <div class="tuku-order-totals" id="tuku-order-totals">
                             <div class="tuku-order-row">
                                 <span><?php printf( __( 'Subtotal (%d)', 'tuku' ), WC()->cart->get_cart_contents_count() ); ?></span>
                                 <span>US$ <?php echo number_format( (float) WC()->cart->get_subtotal(), 0, ',', '.' ); ?></span>
@@ -348,6 +459,13 @@ get_header();
                             </div>
                         </div>
 
+                        <?php if ( current_user_can( 'manage_options' ) ) : ?>
+                        <div class="tuku-demo-bar">
+                            <span class="tuku-demo-bar__label">⚙ Admin</span>
+                            <button type="button" id="tuku-demo-fill"><?php _e( 'Rellenar datos demo', 'tuku' ); ?></button>
+                        </div>
+                        <?php endif; ?>
+
                     </div>
                 </div>
 
@@ -362,98 +480,29 @@ get_header();
 <script>
 (function() {
     var currentStep = 1;
+    var currentTraveler = 0;
+    var totalTravelers = <?php echo (int) $total_guests; ?>;
 
-    // Build summary text for each step
-    function buildSummary(step) {
-        var html = '';
-        if (step === 1) {
-            var first = document.getElementById('tuku_first_name').value;
-            var last = document.getElementById('tuku_last_name').value;
-            var docType = document.getElementById('tuku_doc_type').value;
-            var docNum = document.getElementById('tuku_doc_number').value;
-            var countrySelect = document.getElementById('billing_country');
-            var country = countrySelect.options[countrySelect.selectedIndex].text;
-            var birth = document.getElementById('tuku_birthdate').value;
-            var genderSelect = document.getElementById('tuku_gender');
-            var gender = genderSelect.options[genderSelect.selectedIndex].text;
+    // ── Traveler slider ──────────────────────────────────────────
+    var track = document.getElementById('tuku-travelers-track');
 
-            html += '<strong>Adulto 1</strong><br>';
-            html += first + ' ' + last + '<br>';
-            html += docType + ' ' + docNum + '<br>';
-            html += country + '<br>';
-            if (birth) html += birth + '<br>';
-            if (gender && genderSelect.value) html += gender;
-        }
-        else if (step === 2) {
-            var email = document.getElementById('billing_email').value;
-            html = email;
-        }
-        else if (step === 3) {
-            var code = document.getElementById('tuku_phone_code').value;
-            var phone = document.getElementById('billing_phone').value;
-            html = code + ' ' + phone;
-        }
-        return html;
+    function goToTraveler(index) {
+        if (!track) return;
+        track.style.transform = 'translateX(-' + (index * 100) + '%)';
+        currentTraveler = index;
+
+        document.querySelectorAll('.tuku-traveler-dot').forEach(function(dot, i) {
+            dot.classList.toggle('active', i === index);
+        });
+
+        triggerCheckoutUpdate();
     }
 
-    function setStepState(step, state) {
-        var card = document.querySelector('.tuku-step-card[data-step="' + step + '"]');
-        if (!card) return;
+    function validateTravelerSlide(index) {
+        var slide = document.querySelector('.tuku-traveler-slide[data-traveler="' + index + '"]');
+        if (!slide) return true;
 
-        var body = card.querySelector('.tuku-step-body');
-        var summary = card.querySelector('.tuku-step-summary');
-        var editBtn = card.querySelector('.tuku-step-edit');
-
-        card.classList.remove('active', 'completed', 'pending');
-        card.classList.add(state);
-
-        if (state === 'active') {
-            body.style.display = '';
-            if (summary) summary.style.display = 'none';
-            if (editBtn) editBtn.style.display = 'none';
-        }
-        else if (state === 'completed') {
-            body.style.display = 'none';
-            if (summary) {
-                summary.style.display = '';
-                var summaryText = summary.querySelector('.tuku-step-summary-text');
-                if (summaryText) summaryText.innerHTML = buildSummary(step);
-            }
-            if (editBtn) editBtn.style.display = '';
-        }
-        else {
-            body.style.display = 'none';
-            if (summary) summary.style.display = 'none';
-            if (editBtn) editBtn.style.display = 'none';
-        }
-    }
-
-    function goToStep(step) {
-        // Mark all steps before as completed, target as active, rest as pending
-        for (var i = 1; i <= 4; i++) {
-            if (i < step) {
-                setStepState(i, 'completed');
-            } else if (i === step) {
-                setStepState(i, 'active');
-            } else {
-                setStepState(i, 'pending');
-            }
-        }
-        currentStep = step;
-
-        // Scroll to active card
-        var activeCard = document.querySelector('.tuku-step-card[data-step="' + step + '"]');
-        if (activeCard) {
-            activeCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-    }
-
-    function validateStep(step) {
-        var card = document.querySelector('.tuku-step-card[data-step="' + step + '"]');
-        if (!card) return true;
-
-        var body = card.querySelector('.tuku-step-body');
-        var inputs = body.querySelectorAll('input[required], select[required]');
+        var inputs = slide.querySelectorAll('input[required], select[required]');
         var valid = true;
 
         inputs.forEach(function(input) {
@@ -464,8 +513,157 @@ get_header();
             }
         });
 
-        if (step === 2) {
+        return valid;
+    }
+
+    // Next traveler buttons (no validation required)
+    document.querySelectorAll('.tuku-btn-next-traveler').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            goToTraveler(parseInt(this.getAttribute('data-traveler-next')));
+        });
+    });
+
+    // Previous traveler buttons
+    document.querySelectorAll('.tuku-btn-prev-traveler').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            goToTraveler(parseInt(this.getAttribute('data-traveler-prev')));
+        });
+    });
+
+    // ── DNI warning + live fee update ────────────────────────────
+    function triggerCheckoutUpdate() {
+        if (typeof jQuery !== 'undefined') {
+            jQuery(document.body).trigger('update_checkout');
+        }
+    }
+
+    document.querySelectorAll('.tuku-doc-type-select').forEach(function(select) {
+        var warning = select.closest('.tuku-form-field').querySelector('.tuku-doc-warning');
+
+        select.addEventListener('change', function() {
+            if (warning) warning.style.display = this.value !== 'DNI' ? '' : 'none';
+            triggerCheckoutUpdate();
+        });
+    });
+
+    // ── Step summary builders ─────────────────────────────────────
+    function buildSummary(step) {
+        var html = '';
+        if (step === 1) {
+            for (var t = 0; t < totalTravelers; t++) {
+                var sid = t === 0 ? '' : '_' + t;
+                var firstEl  = document.getElementById('tuku_first_name' + sid);
+                var lastEl   = document.getElementById('tuku_last_name' + sid);
+                var docEl    = document.getElementById('tuku_doc_type' + sid);
+                var docNumEl = document.getElementById('tuku_doc_number' + sid);
+                var ctryEl   = document.getElementById('billing_country' + sid);
+                var birthEl  = document.getElementById('tuku_birthdate' + sid);
+                var genderEl = document.getElementById('tuku_gender' + sid);
+
+                if (!firstEl) continue;
+
+                if (t > 0) html += '<br>';
+                html += '<strong>Adulto ' + (t + 1) + '</strong><br>';
+                html += (firstEl.value + ' ' + lastEl.value).trim() + '<br>';
+                if (docEl && docNumEl) html += docEl.value + ' ' + docNumEl.value + '<br>';
+                if (ctryEl) html += ctryEl.options[ctryEl.selectedIndex].text + '<br>';
+                if (birthEl && birthEl.value) html += birthEl.value + '<br>';
+                if (genderEl && genderEl.value) html += genderEl.options[genderEl.selectedIndex].text;
+            }
+        } else if (step === 2) {
             var email = document.getElementById('billing_email');
+            html = email ? email.value : '';
+        } else if (step === 3) {
+            var code  = document.getElementById('tuku_phone_code');
+            var phone = document.getElementById('billing_phone');
+            html = (code ? code.value : '') + ' ' + (phone ? phone.value : '');
+        }
+        return html;
+    }
+
+    // ── Step navigation ───────────────────────────────────────────
+    function setStepState(step, state) {
+        var card = document.querySelector('.tuku-step-card[data-step="' + step + '"]');
+        if (!card) return;
+
+        var body    = card.querySelector('.tuku-step-body');
+        var summary = card.querySelector('.tuku-step-summary');
+        var editBtn = card.querySelector('.tuku-step-edit');
+
+        card.classList.remove('active', 'completed', 'pending');
+        card.classList.add(state);
+
+        if (state === 'active') {
+            body.style.display = '';
+            if (summary) summary.style.display = 'none';
+            if (editBtn) editBtn.style.display = 'none';
+        } else if (state === 'completed') {
+            body.style.display = 'none';
+            if (summary) {
+                summary.style.display = '';
+                var summaryText = summary.querySelector('.tuku-step-summary-text');
+                if (summaryText) summaryText.innerHTML = buildSummary(step);
+            }
+            if (editBtn) editBtn.style.display = '';
+        } else {
+            body.style.display = 'none';
+            if (summary) summary.style.display = 'none';
+            if (editBtn) editBtn.style.display = 'none';
+        }
+    }
+
+    function goToStep(step) {
+        for (var i = 1; i <= 4; i++) {
+            if (i < step) {
+                setStepState(i, 'completed');
+            } else if (i === step) {
+                setStepState(i, 'active');
+                // Reset traveler slider when re-entering step 1
+                if (i === 1) goToTraveler(0);
+            } else {
+                setStepState(i, 'pending');
+            }
+        }
+        currentStep = step;
+
+        var activeCard = document.querySelector('.tuku-step-card[data-step="' + step + '"]');
+        if (activeCard) {
+            activeCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        triggerCheckoutUpdate();
+    }
+
+    function validateStep(step) {
+        if (step === 1) {
+            // Validate all traveler slides
+            var valid = true;
+            for (var t = 0; t < totalTravelers; t++) {
+                if (!validateTravelerSlide(t)) {
+                    if (valid) goToTraveler(t); // jump to first invalid slide
+                    valid = false;
+                }
+            }
+            return valid;
+        }
+
+        var card = document.querySelector('.tuku-step-card[data-step="' + step + '"]');
+        if (!card) return true;
+
+        var body   = card.querySelector('.tuku-step-body');
+        var inputs = body.querySelectorAll('input[required], select[required]');
+        var valid  = true;
+
+        inputs.forEach(function(input) {
+            input.classList.remove('tuku-input-error');
+            if (!input.value.trim()) {
+                valid = false;
+                input.classList.add('tuku-input-error');
+            }
+        });
+
+        if (step === 2) {
+            var email        = document.getElementById('billing_email');
             var emailConfirm = document.getElementById('billing_email_confirm');
             if (email && emailConfirm && email.value !== emailConfirm.value) {
                 valid = false;
@@ -476,8 +674,18 @@ get_header();
         return valid;
     }
 
-    // Next buttons
-    document.querySelectorAll('.tuku-btn-next').forEach(function(btn) {
+    // Step "next" buttons (only the last traveler's button advances steps)
+    document.querySelectorAll('.tuku-btn-next-step').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var nextStep = parseInt(this.getAttribute('data-next'));
+            if (validateStep(currentStep)) {
+                goToStep(nextStep);
+            }
+        });
+    });
+
+    // Generic next buttons for steps 2, 3 (not traveler-related)
+    document.querySelectorAll('.tuku-btn-next:not(.tuku-btn-next-traveler):not(.tuku-btn-next-step)').forEach(function(btn) {
         btn.addEventListener('click', function() {
             var nextStep = parseInt(this.getAttribute('data-next'));
             if (validateStep(currentStep)) {
@@ -519,7 +727,53 @@ get_header();
         }
     }
 
-    // Init: step 1 active
+    // ── Demo fill (admin only) ────────────────────────────────────
+    var demoBtn = document.getElementById('tuku-demo-fill');
+    if (demoBtn) {
+        demoBtn.addEventListener('click', function() {
+            function setVal(id, val) {
+                var el = document.getElementById(id);
+                if (el) el.value = val;
+            }
+
+            var names = [
+                { first: 'Juan',   last: 'Pérez' },
+                { first: 'María',  last: 'García' },
+                { first: 'Carlos', last: 'López' },
+                { first: 'Ana',    last: 'Rodríguez' },
+                { first: 'Luis',   last: 'Martínez' },
+            ];
+
+            for (var t = 0; t < totalTravelers; t++) {
+                var sid  = t === 0 ? '' : '_' + t;
+                var name = names[t % names.length];
+
+                setVal('tuku_first_name' + sid, name.first);
+                setVal('tuku_last_name'  + sid, name.last);
+                setVal('tuku_doc_type'   + sid, 'DNI');
+                setVal('tuku_doc_number' + sid, '7000000' + (t + 1));
+                setVal('billing_country' + sid, 'PE');
+                setVal('tuku_birthdate'  + sid, '1990-06-15');
+                setVal('tuku_gender'     + sid, 'Masculino');
+
+                var slide = document.querySelector('.tuku-traveler-slide[data-traveler="' + t + '"]');
+                if (slide) {
+                    var warn = slide.querySelector('.tuku-doc-warning');
+                    if (warn) warn.style.display = 'none';
+                }
+            }
+
+            setVal('billing_email',         'demo@tuku.com.pe');
+            setVal('billing_email_confirm', 'demo@tuku.com.pe');
+            setVal('tuku_phone_code',       '+51');
+            setVal('billing_phone',         '999888777');
+
+            var terms = document.getElementById('terms');
+            if (terms) terms.checked = true;
+        });
+    }
+
+    // Init
     goToStep(1);
 })();
 </script>
