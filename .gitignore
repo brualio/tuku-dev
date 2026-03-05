@@ -1,61 +1,48 @@
-.env
-.tmb/
-.wpe-*-ignore
-apple-touch-icon.png
-apple-touch-icon-precomposed.png
-cookie.txt
-favicon.ico
-robots.txt
-docker-compose.yml
-Dockerfile
-wp-admin/
-wp-includes/
-.idea/
+# Wordpress - ignore core, configuration, examples, uploads and logs.
+# https://github.com/github/gitignore/blob/main/WordPress.gitignore
+
+# Core
+#
+# Note: if you want to stage/commit WP core files
+# you can delete this whole section/until Configuration.
+/wp-admin/
+/wp-content/index.php
+/wp-content/languages
+/wp-content/plugins/index.php
+/wp-content/themes/index.php
+/wp-includes/
 /index.php
-license.txt
-readme.html
+/license.txt
+/readme.html
 /wp-*.php
 /xmlrpc.php
-.DS_Store
-*cache*
-*.zip
-.smushit-status
-.gitattributes
-_wpeprivate
-wp-content/plugins/
-wp-content/mu-plugins/
-wp-content/uploads/
-wp-content/upgrade/
-wp-content/ai1wm-backups/
-wp-content/object-cache.php
-wp-content/mysql.sql
-wp-content/mysql.sql.bak
-wp-content/index.php
-wp-content/.htaccess
-wp-content/wflogs/
-.vscode/
-.phpintel/
-/sandr/
-node_modules
-wp-content/webp-express/*
-wp-content/wp-rocket-config/
-wp-content/themes/index.php
-wp-content/themes/twenty*/
-wp-content/themes/genesis/
-wp-content/languages/
-wp-content/themes/.htaccess
-wp-content/updraft/
+
+# Configuration
+wp-config.php
+
+# Example themes
+/wp-content/themes/twenty*/
+
+# Example plugin
+/wp-content/plugins/hello.php
+
+# Uploads
+/wp-content/uploads/
+
+# Log files
 *.log
-*/logs/*
-*.zip
-*.gz
-*.sh
-Dockerfile
-Dockerfile*
-hennessey_wpengine
-hennessey_wpengine*
-.wpe-push-ignore
-local-xdebuginfo.php
-malcare-waf.php
-wp-content/config-d883e9b-nitropack/
-wp-content/smush-webp/
+
+# htaccess
+/.htaccess
+
+# All plugins
+#
+# Note: If you wish to whitelist plugins,
+# uncomment the next line
+#/wp-content/plugins
+
+# All themes
+#
+# Note: If you wish to whitelist themes,
+# uncomment the next line
+#/wp-content/themes
