@@ -280,23 +280,37 @@ $image = get_field('imagen_banner', $term);
                 			<div class="card-product__right">
                 				<div class="card-product__right__content">
                 					<div class="card-product__right__content__top">
+                                        <div class="card-product__right__content__top__term">
+                                            <?php   // Get terms for post
+                                                $terms = get_the_terms($post->ID, 'itinerarios');
+                                                if ($terms && !is_wp_error($terms)) {
+                                                    $names = wp_list_pluck($terms, 'name');
+                                                    foreach ($names as $i => $name) {
+                                                        echo '<span>'.$name.'</span>';
+                                                        if ($i < count($names) - 1) echo ', ';
+                                                    }
+
+                                                }
+                                            ?>
+                                        </div>
                 						<div class="card-product__right__title">
                 							<?php the_title(); ?>
                 						</div>
                                                                 <div class="card-product__right__direction">
                                                                     <div class="icon"><span class="icon-pin"></span></div>
                                                                         <?php   // Get terms for post
-                                                                         $terms = get_the_terms( $post->ID , 'destinos' );
-                                                                         // Loop over each item since it's an array
+                                                                            $terms = get_the_terms( $post->ID , 'destinos' );
+                                                                            // Loop over each item since it's an array
 
-                                                                         if ( $terms != null ){
-                                                                         foreach( $terms as $term ) {
-                                                                            $image = get_field('icono_iti', 'itinerarios_' . $term->term_id );
-                                                                         // Print the name method from $term which is an OBJECT
-                                                                            echo '' . $term->name .'';       
-                                                                         // Get rid of the other data stored in the object, since it's not needed
-                                                                         unset($term);
-                                                                        } } ?>
+                                                                            if ( $terms != null ){
+                                                                            foreach( $terms as $term ) {
+                                                                                $image = get_field('icono_iti', 'itinerarios_' . $term->term_id );
+                                                                            // Print the name method from $term which is an OBJECT
+                                                                                echo '' . $term->name .'';       
+                                                                            // Get rid of the other data stored in the object, since it's not needed
+                                                                            unset($term);
+                                                                            } } 
+                                                                        ?>
                                                                 </div>
                 						<div class="card-product__right__desc">
                                             <?php if ( have_rows( 'highlights' ) ) : ?>
@@ -336,13 +350,16 @@ $image = get_field('imagen_banner', $term);
     		        						<?php endif; ?>
             							</div>
             							<div class="card-product__right__action">
-            								<?php
-            								// Get WooCommerce price
-            								$product = wc_get_product(get_the_ID());
-            								if ($product) {
-            									echo esc_html($product->get_price());
-            								}
-            								?> <?php _e('US$','tuku') ?>
+                                            <?php _e('$','tuku') ?>
+                                            <span>
+                                                <?php
+                                                    // Get WooCommerce price
+                                                    $product = wc_get_product(get_the_ID());
+                                                    if ($product) {
+                                                        echo esc_html($product->get_price());
+                                                    }
+                                                ?> 
+                                            </span>
             							</div>
             							<div class="card-product__right__action-hover">
             								<?php _e('Ver tour','tuku') ?> <span class="icon-next"></span>

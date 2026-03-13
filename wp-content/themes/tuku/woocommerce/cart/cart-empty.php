@@ -27,7 +27,7 @@ defined( 'ABSPATH' ) || exit;
             </svg>
             <h2><?php _e( 'Tu carrito est&aacute; vac&iacute;o', 'tuku' ); ?></h2>
             <p><?php _e( 'Explora nuestros tours y agrega actividades a tu carrito.', 'tuku' ); ?></p>
-            <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="tuku-cart-btn-outline">
+            <a href="<?php echo get_permalink( get_page_by_path('destinos') ); ?>" class="tuku-cart-btn-outline">
                 <?php _e( 'Agregar productos', 'tuku' ); ?>
             </a>
         </div>

@@ -1,57 +1,18 @@
 <?php get_header(); ?>
 <?php /* Template Name: Theme - Inicio */ ?>
 
-<?php
-$args = array( 
-	'post_type' => 'slider', 
-	'post_status' => 'publish',
-	'posts_per_page' => 1,);
-$wp_query = new WP_Query($args);
-?>
-<?php if($wp_query->have_posts()) : ?>
-	<?php while ($wp_query->have_posts()) : $wp_query->the_post(); ?>
-		<?php if ( have_rows( 'sliders' ) ) : ?>
-			<div class="banner-home">
-				<div class="banner-text__action-mouse-home movedownScroll">
-				<span>Swipe up</span>
-					<div class="mouse-animated-home">
-						<span></span>
-					</div>
-				</div>
-				<div class="swiper-container swiper-container-banner-home">
-					<div class="swiper-wrapper">
-						<?php while ( have_rows( 'sliders' ) ) : the_row(); ?>
-							<div class="swiper-slide">
-								<img src="<?php the_sub_field( 'video_background' ); ?>" alt="banner">
-								<div class="banner-home__content">
-									<div class="banner-home__title">
-										<?php the_sub_field( 'titulo_slider' ); ?>
-									</div>
-									<div class="banner-home__desc">
-										<?php the_sub_field( 'texto_slider' ); ?>
-									</div>
-									<?php if( get_sub_field('label_boton_slider') ): ?>
-										<a href="<?php the_sub_field( 'url_boton_slider' ); ?>" class="banner-home__action">
-											<?php the_sub_field( 'label_boton_slider' ); ?> <span class="icon-next"></span>
-										</a>
-									<?php endif; ?>
-								</div>
-							</div>
-						<?php endwhile; ?>
 
-					</div>
-					<!-- Add Pagination -->
-					<div class="swiper-pagination"></div>
-					<!-- Add Arrows -->
-					<div class="swiper-button-next"></div>
-					<div class="swiper-button-prev"></div>
-				</div>
-			</div>
-		<?php endif; ?>
-	<?php endwhile; ?>
-	<?php wp_reset_query(); ?>
-<?php endif; ?>
+<div class="banner-home-video">
+	<picture>
+		<source srcset="<?php the_field('home_image_mobile'); ?>" media="(max-width:767px)">
+		<img src="<?php the_field('home_image_desktop'); ?>" alt="">
+	</picture>
 
+	<video autoplay muted playsinline loop>
+		<source src="<?php the_field('home_video_mobile'); ?>" media="(max-width:767px)" type="video/mp4">
+		<source src="<?php the_field('home_video_desktop'); ?>" media="(min-width:768px)" type="video/mp4">
+	</video>
+</div>
 <div class="home">
 	<div class="container">
 		<div class="feature-home">
@@ -458,39 +419,37 @@ $wp_query = new WP_Query($args);
 											<?php $current_id = get_the_ID(); ?>
 											<div class="swiper-slide">
 												<a href="<?php the_permalink( ); ?>" class="card-product whislist" data-product="<?php echo $current_id ?>">
+													
 													<div class="card-product__left">
 														<?php the_post_thumbnail( 'thumbnail-tour' ); ?>
-														<div class="card-product__left__top">
-
-														
-															<?php   // Get terms for post
-																 $terms = get_the_terms( $post->ID , 'itinerarios' );
-																 // Loop over each item since it's an array
-
-																 if ( $terms != null ){
-																 foreach( $terms as $term ) {
-																 	$image = get_field('icono_iti', 'itinerarios_' . $term->term_id );
-																 // Print the name method from $term which is an OBJECT
-																	echo '<div class="card-product__left__top__item">';
-																	echo '<img src="' . $image['url'] . '" alt="' . $image['alt'] .'">';       
-																	echo '</div>';
-																 // Get rid of the other data stored in the object, since it's not needed
-																 unset($term);
-																} } ?>
-
-														</div>
 														<div class="card-product__left__bottom">
 														    <span class="card-product__heart">
 														        <span class="icon-heart-11"></span>
 														        <span class="icon-heart3"></span>
 														    </span>
 														</div>
+														<!-- <div class="card-product__days">
+															<?php _e('4 días/5 noches','tuku') ?>
+														</div> -->
 													</div>
 													<div class="card-product__right">
 														<div class="card-product__right__content">
 															<div class="card-product__right__content__top">
+																<div class="card-product__right__content__top__term">
+																	<?php   // Get terms for post
+																		$terms = get_the_terms($post->ID, 'itinerarios');
+																		if ($terms && !is_wp_error($terms)) {
+																			$names = wp_list_pluck($terms, 'name');
+																			foreach ($names as $i => $name) {
+																				echo '<span>'.$name.'</span>';
+																				if ($i < count($names) - 1) echo ', ';
+																			}
+
+																		}
+																	?>
+																</div>
 																<div class="card-product__right__title">
-																	<?php the_title(); ?>
+																	<?php the_title(); ?> 
 																</div>
 																<div class="card-product__right__direction">
 																	<div class="icon"><span class="icon-pin"></span></div>
@@ -537,13 +496,16 @@ $wp_query = new WP_Query($args);
 																	<?php endif; ?>
 																	</div>
 																	<div class="card-product__right__action">
-																		<?php
-																		// Get WooCommerce price
-																		$product = wc_get_product(get_the_ID());
-																		if ($product) {
-																			echo esc_html($product->get_price());
-																		}
-																		?> <?php _e('US$','tuku') ?>
+																		<?php _e('$','tuku') ?>
+																		<span>
+																			<?php
+																			// Get WooCommerce price
+																			$product = wc_get_product(get_the_ID());
+																			if ($product) {
+																				echo esc_html($product->get_price());
+																			}
+																			?>
+																		</span>
 																	</div>
 																	<div href="<?php the_permalink( ); ?>" class="card-product__right__action-hover">
 																		<?php _e('Ver tour','tuku') ?> <span class="icon-next"></span>
@@ -1060,16 +1022,20 @@ $wp_query = new WP_Query($args);
 	        },
 	        breakpoints: {
 	            640: {
-	                slidesPerView: 2
+	                slidesPerView: 2,
+					spaceBetween: 20
 	            },
 	            768: {
-	                slidesPerView: 2
+	                slidesPerView: 2,
+					spaceBetween: 30,
 	            },
 	            1024: {
-	                slidesPerView: 3
+	                slidesPerView: 3,
+					spaceBetween: 40,
 	            },
 	            1200: {
-	                slidesPerView: 4
+	                slidesPerView: 4,
+					spaceBetween: 40,
 	            },
 	        }
 	    });

@@ -130,24 +130,20 @@ while ( have_posts() ) :
                 <div class="title__entry">
                     <h1 dataTitle="<?php echo $title; ?>"><?php the_title(); ?></h1>
                     <div class="cat__entry">
+                        <?php   // Get terms for post
+                        $terms = get_the_terms( $post->ID , 'itinerarios' );
+                                                            // Loop over each item since it's an array
 
-
-
-        <?php   // Get terms for post
-        $terms = get_the_terms( $post->ID , 'itinerarios' );
-                                             // Loop over each item since it's an array
-
-        if ( $terms != null ){
-            foreach( $terms as $term ) {
-                $image = get_field('icono_iti', 'itinerarios_' . $term->term_id );
-                                             // Print the name method from $term which is an OBJECT
-                echo '<div class="cat__item">';
-                                    echo '<img src="' . $image['url'] . '" alt="' . $image['alt'] .'">';
-                                    echo '</div>';
-                                             // Get rid of the other data stored in the object, since it's not needed
-                unset($term);
-        } } ?>
-
+                        if ( $terms != null ){
+                            foreach( $terms as $term ) {
+                                $image = get_field('icono_iti', 'itinerarios_' . $term->term_id );
+                                                            // Print the name method from $term which is an OBJECT
+                                echo '<div class="cat__item">';
+                                                    echo '<img src="' . $image['url'] . '" alt="' . $image['alt'] .'">';
+                                                    echo '</div>';
+                                                            // Get rid of the other data stored in the object, since it's not needed
+                                unset($term);
+                        } } ?>
                     </div>
                 </div>
 				<!-- heart wish -->
@@ -160,7 +156,319 @@ while ( have_posts() ) :
 					</p>
 				</span>
 
-                <?php the_content(); ?>
+                <section class="tab__info">
+                    <div class="container">
+                        <div class="menu__tab">
+                            <div class="ul__wrap">
+                                <div class="lista__item">
+                                    <a href="#overview"><?php _e('Resumen','tuku') ?></a>
+                                </div>
+                                <div class="lista__item">
+                                    <a href="#itinerary"><?php _e('Itinerario','tuku') ?></a>
+                                </div>
+                                <div class="lista__item">
+                                    <a href="#servicios"><?php _e('Servicios incluidos','tuku') ?></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="tab__content">
+                    <div class="container tabs__content">
+                        <?php if ( have_rows( 'highlights' ) ) : ?>
+                        <div id="overview" class="overview__content">
+                            <h1><?php the_title(); ?></h1>
+                            <h3><?php _e('Destacados','tuku') ?></h3>
+                            <ul>
+                                <?php while ( have_rows( 'highlights' ) ) : the_row(); ?>
+                                    <li><img src="<?php echo get_template_directory_uri(); ?>/assets/img/star-o.svg" alt=""> <?php the_sub_field( 'highlight_item' ); ?></li>
+                                <?php endwhile; ?>
+                            </ul>
+                        </div>
+                        <?php endif; ?>
+                        <?php if ( have_rows( 'summary' ) ) : $s;?>
+                            <div id="itinerary" class="itinerario__wrap">
+                                <h1><?php _e('Resumen de itinerario','tuku') ?></h3>
+                                <div class="accordeon__itineratio">
+                                    <?php while ( have_rows( 'summary' ) ) : the_row(); $s++;?>
+                                        <div class="accordeon-item">
+                                            <div class="accordeon-title">
+                                                <div class="wrap__number"><?php echo $s; ?></div>
+                                                <div class="wrap__title__iti">
+                                                    <h6><?php _e('Día','tuku') ?> <?php echo $s; ?></h6>
+                                                    <h3><?php the_sub_field( 'titulo_summary' ); ?></h3>
+                                                </div>
+                                            </div>
+                                            <div class="accordeon-content">
+                                                <?php the_sub_field( 'contenido_summary' ); ?>
+                                            </div>
+                                        </div>
+                                    <?php endwhile; ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                        <style>
+                            .mtours-block{
+                                padding: 40px 0;
+                            }
+
+                            .mtours-block-title{
+                                margin-bottom: 20px;
+                            }
+
+                            .mtours-block-title h3{
+                                font-family: Poppins-SemiBold;
+                                font-weight: 600;
+                                font-size: 18px;
+                                font-stretch: normal;
+                                font-style: normal;
+                                line-height: 1.61;
+                                letter-spacing: normal;
+                                text-align: left;
+                                color: #d81159;
+                            }
+
+                            .mtours-block__items{
+                                display: flex;
+                                flex-wrap: wrap;
+                            }
+
+                            .mtours-block__item{
+                                padding: 10px 18px 13px 11px;
+                                box-sizing: border-box;
+                                display: flex;
+                                position: relative;
+                                width: 45%;
+                                margin-right: 10%;
+                                margin-bottom: 7px;
+                            }
+
+                            .mtours-block__item:nth-child(2n+2){
+                                margin-right: 0;
+                            }
+
+                            .mtours-block__item:before{
+                                content: "";
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                background-color: #d5d5d5;
+                                opacity: 0;
+                                transition: all .25s ease;
+                                z-index: 1;
+                            }
+
+                            .mtours-block__item:hover:before{
+                                opacity: 0.25;
+                            }
+
+                            .mtours-block__itemBg{
+                                width: 132px;
+                                height: 80px;
+                                background-repeat: no-repeat;
+                                background-position: 0 0;
+                                background-size: 100%;
+                                margin: 0;
+                                position: relative;
+                                z-index: 3;
+                            }
+
+                            .mtours-block__itemInfo{
+                                width: calc(100% - 132px);
+                                padding-left: 30px;
+                                box-sizing: border-box;
+                                position: relative
+                                z-index: 3;
+                            }
+
+                            .mtours-block__itemInfoTitle h3{
+                                color: #3e3e3e;
+                                font-family: Poppins-SemiBold;
+                                font-size: 16px;
+                                line-height: 1.2;
+                            }
+
+                            .mtours-block__itemInfoPriceUrl{
+                                display: flex;
+                                align-items: center;
+                                justify-content: space-between;
+                                margin-top: 10px;
+                            }
+
+
+                            .mtours-block__itemInfoPrice > i{
+                                font-size: 13px;
+                                line-height: 1.2;
+                                color: #d81159;
+                                font-style: normal;
+                                font-family: Poppins-SemiBold;
+                            }
+
+                            .mtours-block__itemInfoPrice{
+                                font-size: 15px;
+                                line-height: 1.2;
+                                color: #d81159;
+                                font-family: Poppins-SemiBold;
+                            }
+
+                            .mtours-block__itemInfoUrl{
+                                font-size: 14px;
+                                line-height: 1.2;
+                                color: #d81159;
+                                font-family: Poppins-Regular;
+                            }
+
+                            @media screen and (max-width: 991px){
+                                .mtours-block__item{
+                                    width: 48%;
+                                    margin-right: 4%;
+                                }
+
+                                .mtours-block__itemBg{
+                                    width: 110px;
+                                }
+
+                                .mtours-block__itemInfo{
+                                    width: calc(100% - 110px);
+                                    padding-left: 24px;
+                                }
+                            }
+
+                            @media screen and (max-width: 767px){
+                                .mtours-block{
+                                    padding: 30px 0;
+                                }
+
+                                .mtours-block-title h3{
+                                    font-size: 14px;
+                                }
+
+                                .mtours-block__item{
+                                    width: 100%;
+                                    margin-right: 0;
+                                }
+
+                                .mtours-block__itemBg{
+                                    width: 110px;
+                                }
+
+                                .mtours-block__itemInfo{
+                                    width: calc(100% - 110px);
+                                    padding-left: 24px;
+                                }
+
+                                .mtours-block__itemInfoTitle h3{
+                                    font-size: 13px;
+                                }
+
+                                .mtours-block__itemInfoUrl{
+                                    display: none;
+                                }
+
+                                .mtours-block__itemInfoPrice > i{
+                                    font-size: 10px;
+                                }
+
+                                .mtours-block__itemInfoPrice{
+                                    font-size: 12px;
+                                }
+                            }
+
+                        </style>
+
+                        <?php
+                        $featured_posts = get_field('mtours_tours');
+                        if( $featured_posts ): ?>
+                        <div class="mtours-block">
+                            <div class="mtours-block-title">
+                                <h3><?php _e('Tours que podrian gustarte','tuku') ?></h3>
+                            </div>
+                            <div class="mtours-block__items">
+                            <?php foreach( $featured_posts as $featured_post ):
+                                $thumbnail = get_the_post_thumbnail_url( $featured_post->ID );
+                                $permalink = get_permalink( $featured_post->ID );
+                                $title = get_the_title( $featured_post->ID );
+
+                                // Get WooCommerce price
+                                $price_tour = '';
+                                $featured_product = wc_get_product($featured_post->ID);
+                                if ($featured_product) {
+                                    $price_tour = $featured_product->get_price();
+                                }
+                                ?>
+                                <article class="mtours-block__item linkParent--js">
+                                    <figure class="mtours-block__itemBg" style="background-image: url(<?php echo esc_html( $thumbnail ); ?>)"></figure>
+                                    <div class="mtours-block__itemInfo">
+                                        <div class="mtours-block__itemInfoTitle">
+                                            <h3><?php echo esc_html( $title ); ?></h3>
+                                        </div>
+                                        <div class="mtours-block__itemInfoPriceUrl">
+                                        <div class="mtours-block__itemInfoPrice"><i><?php _e('Desde','tuku') ?></i> $<?php echo esc_html( $price_tour ); ?></div>
+                                        <a class="mtours-block__itemInfoUrl" target="_blank" href="<?php echo esc_url( $permalink ); ?>"><?php _e('ver actividad') ?></a>
+                                        </div>
+                                    </div>
+                                </article>
+                            <?php endforeach; ?>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+
+
+                        <div id="servicios" class="servicios__includes">
+
+                            <?php if ( have_rows( 'servicios_incluidos' ) ) : ?>
+                                <div class="servicios__item">
+                                    <div class="accordeon-title-serv">
+                                        <h3><?php _e('Servicios incluidos','tuku') ?></h3>
+                                    </div>
+                                    <div class="accordeon-content-serv">
+                                        <ul>
+                                            <?php while ( have_rows( 'servicios_incluidos' ) ) : the_row(); ?>
+                                                <li><img src="<?php echo get_template_directory_uri(); ?>/assets/img/check.svg" alt=""> <?php the_sub_field( 'servicios_incluidos_item' ); ?></li>
+                                            <?php endwhile; ?>
+                                        </ul>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ( have_rows( 'servicios_no_incluidos' ) ) : ?>
+                                <div class="servicios__item">
+                                    <div class="accordeon-title-serv">
+                                        <h3><?php _e('Servicios no incluidos','tuku') ?></h3>
+                                    </div>
+                                    <div class="accordeon-content-serv">
+                                        <ul>
+                                            <?php while ( have_rows( 'servicios_no_incluidos' ) ) : the_row(); ?>
+                                                <li><img src="<?php echo get_template_directory_uri(); ?>/assets/img/wrong.svg" alt=""> <?php the_sub_field( 'servicios_no_incluidos_item' ); ?></li>
+                                            <?php endwhile; ?>
+                                        </ul>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            <div class="servicios__item">
+                                <div class="accordeon-title-serv">
+                                    <h3><?php _e('Lo que necesitas saber','tuku') ?></h3>
+                                </div>
+                                <div class="accordeon-content-serv you__know">
+                                    <?php the_field( 'lo_que_necesitas_saber' ); ?>
+                                </div>
+                            </div>
+                            <div class="servicios__item">
+                                <div class="accordeon-title-serv">
+                                    <h3><?php _e('Política de cancelación','tuku') ?></h3>
+                                </div>
+                                <div class="accordeon-content-serv you__know">
+                                    <?php the_field( 'politica_de_cancelacion' ); ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- <?php the_content(); ?> -->
             </div>
             <div class="entry__text">
                 <div class="wrap__price">
@@ -371,315 +679,7 @@ while ( have_posts() ) :
     </div>
 </section>
 
-<section class="tab__info">
-    <div class="container">
-        <div class="menu__tab">
-            <div class="ul__wrap">
-                <div class="lista__item">
-                    <a href="#overview"><?php _e('Resumen','tuku') ?></a>
-                </div>
-                <div class="lista__item">
-                    <a href="#itinerary"><?php _e('Itinerario','tuku') ?></a>
-                </div>
-                <div class="lista__item">
-                    <a href="#servicios"><?php _e('Servicios incluidos','tuku') ?></a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
-<section class="tab__content">
-    <div class="container tabs__content">
-        <?php if ( have_rows( 'highlights' ) ) : ?>
-        <div id="overview" class="overview__content">
-            <h1><?php the_title(); ?></h1>
-            <h3><?php _e('Destacados','tuku') ?></h3>
-            <ul>
-                <?php while ( have_rows( 'highlights' ) ) : the_row(); ?>
-                    <li><img src="<?php echo get_template_directory_uri(); ?>/assets/img/star-o.svg" alt=""> <?php the_sub_field( 'highlight_item' ); ?></li>
-                <?php endwhile; ?>
-            </ul>
-        </div>
-        <?php endif; ?>
-        <?php if ( have_rows( 'summary' ) ) : $s;?>
-            <div id="itinerary" class="itinerario__wrap">
-                <h1><?php _e('Resumen de itinerario','tuku') ?></h3>
-                <div class="accordeon__itineratio">
-                    <?php while ( have_rows( 'summary' ) ) : the_row(); $s++;?>
-                        <div class="accordeon-title">
-                            <div class="wrap__number"><?php echo $s; ?></div>
-                            <div class="wrap__title__iti">
-                                <h6><?php _e('Día','tuku') ?> <?php echo $s; ?></h6>
-                                <h3><?php the_sub_field( 'titulo_summary' ); ?></h3>
-                            </div>
-                        </div>
-                        <div class="accordeon-content">
-                            <?php the_sub_field( 'contenido_summary' ); ?>
-                        </div>
-                    <?php endwhile; ?>
-                </div>
-            </div>
-        <?php endif; ?>
-
-        <style>
-            .mtours-block{
-                padding: 40px 0;
-            }
-
-            .mtours-block-title{
-                margin-bottom: 20px;
-            }
-
-            .mtours-block-title h3{
-                font-family: Poppins-SemiBold;
-                font-weight: 600;
-                font-size: 18px;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: 1.61;
-                letter-spacing: normal;
-                text-align: left;
-                color: #d81159;
-            }
-
-            .mtours-block__items{
-                display: flex;
-                flex-wrap: wrap;
-            }
-
-            .mtours-block__item{
-                padding: 10px 18px 13px 11px;
-                box-sizing: border-box;
-                display: flex;
-                position: relative;
-                width: 45%;
-                margin-right: 10%;
-                margin-bottom: 7px;
-            }
-
-            .mtours-block__item:nth-child(2n+2){
-                margin-right: 0;
-            }
-
-            .mtours-block__item:before{
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: #d5d5d5;
-                opacity: 0;
-                transition: all .25s ease;
-                z-index: 1;
-            }
-
-            .mtours-block__item:hover:before{
-                opacity: 0.25;
-            }
-
-            .mtours-block__itemBg{
-                width: 132px;
-                height: 80px;
-                background-repeat: no-repeat;
-                background-position: 0 0;
-                background-size: 100%;
-                margin: 0;
-                position: relative;
-                z-index: 3;
-            }
-
-            .mtours-block__itemInfo{
-                width: calc(100% - 132px);
-                padding-left: 30px;
-                box-sizing: border-box;
-                position: relative
-                z-index: 3;
-            }
-
-            .mtours-block__itemInfoTitle h3{
-                color: #3e3e3e;
-                font-family: Poppins-SemiBold;
-                font-size: 16px;
-                line-height: 1.2;
-            }
-
-            .mtours-block__itemInfoPriceUrl{
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                margin-top: 10px;
-            }
-
-
-            .mtours-block__itemInfoPrice > i{
-                font-size: 13px;
-                line-height: 1.2;
-                color: #d81159;
-                font-style: normal;
-                font-family: Poppins-SemiBold;
-            }
-
-            .mtours-block__itemInfoPrice{
-                font-size: 15px;
-                line-height: 1.2;
-                color: #d81159;
-                font-family: Poppins-SemiBold;
-            }
-
-            .mtours-block__itemInfoUrl{
-                font-size: 14px;
-                line-height: 1.2;
-                color: #d81159;
-                font-family: Poppins-Regular;
-            }
-
-            @media screen and (max-width: 991px){
-                .mtours-block__item{
-                    width: 48%;
-                    margin-right: 4%;
-                }
-
-                .mtours-block__itemBg{
-                    width: 110px;
-                }
-
-                .mtours-block__itemInfo{
-                    width: calc(100% - 110px);
-                    padding-left: 24px;
-                }
-            }
-
-            @media screen and (max-width: 767px){
-                .mtours-block{
-                    padding: 30px 0;
-                }
-
-                .mtours-block-title h3{
-                    font-size: 14px;
-                }
-
-                .mtours-block__item{
-                    width: 100%;
-                    margin-right: 0;
-                }
-
-                .mtours-block__itemBg{
-                    width: 110px;
-                }
-
-                .mtours-block__itemInfo{
-                    width: calc(100% - 110px);
-                    padding-left: 24px;
-                }
-
-                .mtours-block__itemInfoTitle h3{
-                    font-size: 13px;
-                }
-
-                .mtours-block__itemInfoUrl{
-                    display: none;
-                }
-
-                .mtours-block__itemInfoPrice > i{
-                    font-size: 10px;
-                }
-
-                .mtours-block__itemInfoPrice{
-                    font-size: 12px;
-                }
-            }
-
-        </style>
-
-        <?php
-        $featured_posts = get_field('mtours_tours');
-        if( $featured_posts ): ?>
-        <div class="mtours-block">
-            <div class="mtours-block-title">
-                <h3><?php _e('Tours que podrian gustarte','tuku') ?></h3>
-            </div>
-            <div class="mtours-block__items">
-            <?php foreach( $featured_posts as $featured_post ):
-                $thumbnail = get_the_post_thumbnail_url( $featured_post->ID );
-                $permalink = get_permalink( $featured_post->ID );
-                $title = get_the_title( $featured_post->ID );
-
-                // Get WooCommerce price
-                $price_tour = '';
-                $featured_product = wc_get_product($featured_post->ID);
-                if ($featured_product) {
-                    $price_tour = $featured_product->get_price();
-                }
-                ?>
-                <article class="mtours-block__item linkParent--js">
-                    <figure class="mtours-block__itemBg" style="background-image: url(<?php echo esc_html( $thumbnail ); ?>)"></figure>
-                    <div class="mtours-block__itemInfo">
-                        <div class="mtours-block__itemInfoTitle">
-                            <h3><?php echo esc_html( $title ); ?></h3>
-                        </div>
-                        <div class="mtours-block__itemInfoPriceUrl">
-                           <div class="mtours-block__itemInfoPrice"><i><?php _e('Desde','tuku') ?></i> $<?php echo esc_html( $price_tour ); ?></div>
-                           <a class="mtours-block__itemInfoUrl" target="_blank" href="<?php echo esc_url( $permalink ); ?>"><?php _e('ver actividad') ?></a>
-                        </div>
-                    </div>
-                </article>
-            <?php endforeach; ?>
-            </div>
-        </div>
-        <?php endif; ?>
-
-
-        <div id="servicios" class="servicios__includes">
-
-            <?php if ( have_rows( 'servicios_incluidos' ) ) : ?>
-                <div class="servicios__item">
-                    <div class="accordeon-title-serv">
-                        <h3><?php _e('Servicios incluidos','tuku') ?></h3>
-                    </div>
-                    <div class="accordeon-content-serv">
-                        <ul>
-                            <?php while ( have_rows( 'servicios_incluidos' ) ) : the_row(); ?>
-                                <li><img src="<?php echo get_template_directory_uri(); ?>/assets/img/check.svg" alt=""> <?php the_sub_field( 'servicios_incluidos_item' ); ?></li>
-                            <?php endwhile; ?>
-                        </ul>
-                    </div>
-                </div>
-            <?php endif; ?>
-            <?php if ( have_rows( 'servicios_no_incluidos' ) ) : ?>
-                <div class="servicios__item">
-                    <div class="accordeon-title-serv">
-                        <h3><?php _e('Servicios no incluidos','tuku') ?></h3>
-                    </div>
-                    <div class="accordeon-content-serv">
-                        <ul>
-                            <?php while ( have_rows( 'servicios_no_incluidos' ) ) : the_row(); ?>
-                                <li><img src="<?php echo get_template_directory_uri(); ?>/assets/img/wrong.svg" alt=""> <?php the_sub_field( 'servicios_no_incluidos_item' ); ?></li>
-                            <?php endwhile; ?>
-                        </ul>
-                    </div>
-                </div>
-            <?php endif; ?>
-            <div class="servicios__item">
-                <div class="accordeon-title-serv">
-                    <h3><?php _e('Lo que necesitas saber','tuku') ?></h3>
-                </div>
-                <div class="accordeon-content-serv you__know">
-                    <?php the_field( 'lo_que_necesitas_saber' ); ?>
-                </div>
-            </div>
-            <div class="servicios__item">
-                <div class="accordeon-title-serv">
-                    <h3><?php _e('Política de cancelación','tuku') ?></h3>
-                </div>
-                <div class="accordeon-content-serv you__know">
-                    <?php the_field( 'politica_de_cancelacion' ); ?>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
 
 <!-- post relacionados -->
@@ -1017,7 +1017,7 @@ get_footer( 'shop' );
 	        slidesPerView: 'auto',
 	        autoHeight: true, //enable auto height
 	        centeredSlides: false,
-	        spaceBetween: 15,
+	        spaceBetween: 10,
 	        grabCursor: false,
 	        loop: true,
 	        navigation: {
@@ -1039,20 +1039,28 @@ get_footer( 'shop' );
 
 	    //acordion
 	    $(function($){
-	        var contents = $('.accordeon-content');
-	      var titles = $('.accordeon-title');
-	      titles.on('click',function(){
-	        var title = $(this);
-	        contents.filter(':visible').slideUp(function(){
-	            $(this).prev('.accordeon-title').removeClass('is-opened');
-	        });
+	        var items = $('.accordeon-item');
+            var contents = $('.accordeon-content');
+            var titles = $('.accordeon-title');
+            items.first().find('.accordeon-title').addClass('is-opened');
+             items.first().find('.accordeon-content').show();
+            titles.on('click', function(){
+                var title = $(this);
+                var item = title.closest('.accordeon-item');
+                var content = item.find('.accordeon-content');
+                contents.filter(':visible').slideUp(function(){
+                    $(this)
+                        .closest('.accordeon-item')
+                        .find('.accordeon-title')
+                        .removeClass('is-opened');
+                });
+                if(!content.is(':visible')){
+                    content.slideDown(function(){
+                        title.addClass('is-opened');
+                    });
+                }
+            });
 
-	        var content = title.next('.accordeon-content');
-
-	        if (!content.is(':visible')) {
-	          content.slideDown(function(){title.addClass('is-opened')});
-	        }
-	      });
 	    });
 
 	    //acordion
@@ -1074,6 +1082,7 @@ get_footer( 'shop' );
 	    });
 
 	    //clase menu
+        $('.lista__item a').first().addClass('selected');
 	    $('.lista__item a').click(function(){
 	        $('.lista__item a').removeClass('selected')
 	        $(this).addClass('selected');

@@ -91,7 +91,7 @@ get_header();
 <section class="tuku-checkout-page">
     <div class="container">
         <a href="<?php echo esc_url( wc_get_cart_url() ); ?>" class="tuku-checkout-back">
-            &larr; <?php _e( 'Regresar al carrito', 'tuku' ); ?>
+            <span class="icons icons-prev"></span> <?php _e( 'Regresar al carrito', 'tuku' ); ?>
         </a>
         <h1 class="tuku-checkout-title"><?php _e( '¡Falta poco! Completa tus datos y finaliza tu compra', 'tuku' ); ?></h1>
 
@@ -161,11 +161,14 @@ get_header();
                                             <div class="tuku-form-field">
                                                 <label><?php _e( 'Documento de identidad', 'tuku' ); ?> <abbr class="required">*</abbr></label>
                                                 <div class="tuku-input-group">
-                                                    <select id="tuku_doc_type<?php echo $sid; ?>" name="<?php echo esc_attr( $fn_doc ); ?>" class="tuku-select-inline tuku-doc-type-select">
-                                                        <option value="DNI">DNI</option>
-                                                        <option value="Pasaporte"><?php _e( 'Pasaporte', 'tuku' ); ?></option>
-                                                        <option value="CE"><?php _e( 'CE', 'tuku' ); ?></option>
-                                                    </select>
+                                                    <div class="tuku-input-group-select">
+                                                        <select id="tuku_doc_type<?php echo $sid; ?>" name="<?php echo esc_attr( $fn_doc ); ?>" class="tuku-select-inline tuku-doc-type-select">
+                                                            <option value="DNI">DNI</option>
+                                                            <option value="Pasaporte"><?php _e( 'Pasaporte', 'tuku' ); ?></option>
+                                                            <option value="CE"><?php _e( 'CE', 'tuku' ); ?></option>
+                                                        </select>
+                                                        <span class="icons icons-arrow-down"></span>
+                                                    </div>
                                                     <input type="text" id="tuku_doc_number<?php echo $sid; ?>" name="<?php echo esc_attr( $fn_docnum ); ?>" placeholder="<?php esc_attr_e( 'N° de documento', 'tuku' ); ?>" required>
                                                 </div>
                                                 <div class="tuku-doc-warning" style="display:none;">
@@ -174,12 +177,15 @@ get_header();
                                             </div>
                                             <div class="tuku-form-field">
                                                 <label><?php _e( 'País de residencia', 'tuku' ); ?> <abbr class="required">*</abbr></label>
-                                                <select id="billing_country<?php echo $sid; ?>" name="<?php echo esc_attr( $fn_ctry ); ?>" class="tuku-select" required>
-                                                    <option value=""><?php _e( 'Seleccionar país', 'tuku' ); ?></option>
-                                                    <?php foreach ( $countries as $code => $name ) : ?>
-                                                        <option value="<?php echo esc_attr( $code ); ?>" <?php selected( $default_country, $code ); ?>><?php echo esc_html( $name ); ?></option>
-                                                    <?php endforeach; ?>
-                                                </select>
+                                                <div class="tuku-input-group-select">
+                                                    <select id="billing_country<?php echo $sid; ?>" name="<?php echo esc_attr( $fn_ctry ); ?>" class="tuku-select" required>
+                                                        <option value=""><?php _e( 'Seleccionar país', 'tuku' ); ?></option>
+                                                        <?php foreach ( $countries as $code => $name ) : ?>
+                                                            <option value="<?php echo esc_attr( $code ); ?>" <?php selected( $default_country, $code ); ?>><?php echo esc_html( $name ); ?></option>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                    <span class="icons icons-arrow-down"></span>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -190,14 +196,21 @@ get_header();
                                             </div>
                                             <div class="tuku-form-field">
                                                 <label><?php _e( 'Género', 'tuku' ); ?> <abbr class="required">*</abbr></label>
-                                                <select id="tuku_gender<?php echo $sid; ?>" name="<?php echo esc_attr( $fn_gender ); ?>" class="tuku-select" required>
-                                                    <option value=""><?php _e( 'Seleccionar', 'tuku' ); ?></option>
-                                                    <option value="Masculino"><?php _e( 'Masculino', 'tuku' ); ?></option>
-                                                    <option value="Femenino"><?php _e( 'Femenino', 'tuku' ); ?></option>
-                                                    <option value="Otro"><?php _e( 'Otro', 'tuku' ); ?></option>
-                                                    <option value="Prefiero no decir"><?php _e( 'Prefiero no decir', 'tuku' ); ?></option>
-                                                </select>
+                                                <div class="tuku-input-group-select">
+                                                    <select id="tuku_gender<?php echo $sid; ?>" name="<?php echo esc_attr( $fn_gender ); ?>" class="tuku-select" required>
+                                                        <option value=""><?php _e( 'Seleccionar', 'tuku' ); ?></option>
+                                                        <option value="Masculino"><?php _e( 'Masculino', 'tuku' ); ?></option>
+                                                        <option value="Femenino"><?php _e( 'Femenino', 'tuku' ); ?></option>
+                                                        <option value="Otro"><?php _e( 'Otro', 'tuku' ); ?></option>
+                                                        <option value="Prefiero no decir"><?php _e( 'Prefiero no decir', 'tuku' ); ?></option>
+                                                    </select>
+                                                    <span class="icons icons-arrow-down"></span>
+                                                </div>
                                             </div>
+                                        </div>
+
+                                        <div class="tuku-info">
+                                            <p>Algunas actividades seleccionadas tienen un incremento de precio. Si tienes dudas porfavor contactate al +51 966461384</p>
                                         </div>
 
                                         <div class="tuku-step-actions">
@@ -354,9 +367,8 @@ get_header();
 
                 <!-- RIGHT: Order Summary Sidebar -->
                 <div class="tuku-checkout-sidebar">
+                    <h2 class="tuku-order-summary__title"><?php _e( 'Resumen del pedido', 'tuku' ); ?></h2>
                     <div class="tuku-order-summary">
-                        <h2 class="tuku-order-summary__title"><?php _e( 'Resumen del pedido', 'tuku' ); ?></h2>
-
                         <div class="tuku-order-items">
                             <?php foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) :
                                 $_product = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
@@ -383,11 +395,16 @@ get_header();
                                 }
                             ?>
                             <div class="tuku-order-item">
-                                <div class="tuku-order-item__thumb">
-                                    <?php echo $thumbnail; ?>
+                                <div class="tuku-order-item__wrap">
+                                    <div class="tuku-order-item__thumb">
+                                        <?php echo $thumbnail; ?>
+                                    </div>
+                                    <div class="tuku-order-item__info">
+                                        <h4 class="tuku-order-item__name"><?php echo esc_html( $product_name ); ?></h4>
+                                        <span class="tuku-order-item__price">US$ <?php echo number_format( (float) $sale_price * $cart_item['quantity'], 0 ); ?></span>
+                                    </div>
                                 </div>
-                                <div class="tuku-order-item__info">
-                                    <h4 class="tuku-order-item__name"><?php echo esc_html( $product_name ); ?></h4>
+                                <div class="tuku-order-item__bottom">
                                     <?php if ( $date_display ) : ?>
                                         <span class="tuku-order-item__meta">
                                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -400,7 +417,6 @@ get_header();
                                             <?php echo esc_html( $guests ); ?> <?php echo $guests === 1 ? __('adulto','tuku') : __('adultos','tuku'); ?>
                                         </span>
                                     <?php endif; ?>
-                                    <span class="tuku-order-item__price">US$ <?php echo number_format( (float) $sale_price * $cart_item['quantity'], 0 ); ?></span>
                                 </div>
                             </div>
                             <?php endforeach; ?>
@@ -466,6 +482,21 @@ get_header();
                         </div>
                         <?php endif; ?>
 
+                    </div>
+                    <div class="tuku-checkout-site">
+                        <figure><img src="<?php echo get_template_directory_uri(); ?>/assets/img/site-safe.svg" alt="Site Safe"></figure>
+                        <div class="tuku-checkout-site-wrap">
+                            <h3><?php _e( 'This is a safe site', 'tuku' ); ?></h3>
+                            <p><?php _e( 'We use secure connections to protect your information.', 'tuku' ); ?></p>
+                        </div>
+                    </div>
+                    <div class="tuku-checkout-privacy">
+                        <span class="icons icons-exclamation"></span>
+                        <div class="tuku-checkout-privacy-wrap">
+                            <h3><?php _e( 'Ver políticas de pagos y cancelaciones', 'tuku' ); ?></h3>
+                            <a href="#"><?php _e( 'Política de cancelaciones', 'tuku' ); ?></a>
+                        </div>
+                        
                     </div>
                 </div>
 

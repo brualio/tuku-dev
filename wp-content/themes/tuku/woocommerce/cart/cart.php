@@ -15,7 +15,7 @@ get_header();
 <section class="tuku-cart-page">
     <div class="container">
         <a href="javascript:history.back()" class="tuku-cart-back">
-            ← <?php _e( 'Regresar', 'tuku' ); ?>
+            <span class="icons icons-prev"></span> <?php _e( 'Regresar', 'tuku' ); ?>
         </a>
         <h1 class="tuku-cart-title"><?php _e( 'Mi Carrito de compras', 'tuku' ); ?></h1>
 
@@ -29,7 +29,7 @@ get_header();
                 </svg>
                 <h2><?php _e( 'Tu carrito está vacío', 'tuku' ); ?></h2>
                 <p><?php _e( 'Quieres quitar esta actividad de tu carrito?', 'tuku' ); ?></p>
-                <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="tuku-cart-btn-outline">
+                <a href="<?php echo get_permalink( get_page_by_path('destinos') ); ?>" class="tuku-cart-btn-outline">
                     <?php _e( 'Agregar productos', 'tuku' ); ?>
                 </a>
             </div>
@@ -78,48 +78,57 @@ get_header();
                         ?>
 
                         <div class="tuku-cart-item" data-key="<?php echo esc_attr( $cart_item_key ); ?>">
-                            <div class="tuku-cart-item__thumb">
-                                <?php if ( $product_permalink ) : ?>
-                                    <a href="<?php echo esc_url( $product_permalink ); ?>"><?php echo $thumbnail; ?></a>
-                                <?php else : ?>
-                                    <?php echo $thumbnail; ?>
-                                <?php endif; ?>
-                            </div>
-                            <div class="tuku-cart-item__info">
-                                <div class="tuku-cart-item__header">
-                                    <div>
-                                        <h3 class="tuku-cart-item__name">
-                                            <?php if ( $product_permalink ) : ?>
-                                                <a href="<?php echo esc_url( $product_permalink ); ?>"><?php echo $product_name; ?></a>
-                                            <?php else : ?>
-                                                <?php echo $product_name; ?>
-                                            <?php endif; ?>
-                                        </h3>
+                            <div class="tuku-cart-item__wrap">
+                                <div class="tuku-cart-item__thumb">
+                                    <?php if ( $product_permalink ) : ?>
+                                        <a href="<?php echo esc_url( $product_permalink ); ?>"><?php echo $thumbnail; ?></a>
+                                    <?php else : ?>
+                                        <?php echo $thumbnail; ?>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="tuku-cart-item__info">
+                                    <div class="tuku-cart-item__header">
+                                        <div>
+                                            <h3 class="tuku-cart-item__name">
+                                                <?php if ( $product_permalink ) : ?>
+                                                    <a href="<?php echo esc_url( $product_permalink ); ?>"><?php echo $product_name; ?></a>
+                                                <?php else : ?>
+                                                    <?php echo $product_name; ?>
+                                                <?php endif; ?>
+                                            </h3>
+                                            
+                                        </div>
+                                        <button type="button" class="tuku-cart-item__remove" data-key="<?php echo esc_attr( $cart_item_key ); ?>" data-name="<?php echo esc_attr( $product_name ); ?>" aria-label="<?php esc_attr_e( 'Quitar', 'tuku' ); ?>">
+                                            <span class="icons icons-trash"></span>
+                                        </button>
+                                    </div>
+                                    <div class="tuku-cart-item__meta">
                                         <?php if ( $destino_name ) : ?>
-                                            <span class="tuku-cart-item__location"><?php _e( 'En', 'tuku' ); ?> <?php echo esc_html( $destino_name ); ?></span>
+                                            <span class="tuku-cart-item__location">
+                                                <?php _e( 'En', 'tuku' ); ?> 
+                                                <i><?php echo esc_html( $destino_name ); ?></i>
+                                            </span>
                                         <?php endif; ?>
                                     </div>
-                                    <button type="button" class="tuku-cart-item__remove" data-key="<?php echo esc_attr( $cart_item_key ); ?>" data-name="<?php echo esc_attr( $product_name ); ?>" aria-label="<?php esc_attr_e( 'Quitar', 'tuku' ); ?>">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                            <polyline points="3 6 5 6 21 6"></polyline>
-                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                        </svg>
-                                    </button>
                                 </div>
-                                <div class="tuku-cart-item__meta">
+                            </div>
+                            
+                            <div class="tuku-cart-item__bottom">
+                                <div class="tuku-cart-item__bottom__wrap">
                                     <?php if ( $date_display ) : ?>
-                                    <span class="tuku-cart-item__date">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                                        <?php echo esc_html( $date_display ); ?>
-                                    </span>
+                                        <span class="tuku-cart-item__date">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                            <?php echo esc_html( $date_display ); ?>
+                                        </span>
                                     <?php endif; ?>
                                     <?php if ( $guests ) : ?>
-                                    <span class="tuku-cart-item__guests">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                                        <?php echo esc_html( $guests ); ?> <?php echo $guests === 1 ? __('adulto','tuku') : __('adultos','tuku'); ?>
-                                    </span>
+                                        <span class="tuku-cart-item__guests">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                            <?php echo esc_html( $guests ); ?> <?php echo $guests === 1 ? __('adulto','tuku') : __('adultos','tuku'); ?>
+                                        </span>
                                     <?php endif; ?>
                                 </div>
+
                                 <div class="tuku-cart-item__price">
                                     <?php if ( $is_on_sale && $regular_price ) : ?>
                                         <span class="tuku-cart-item__price-regular">US$ <?php echo number_format( (float) $regular_price * $cart_item['quantity'], 0 ); ?></span>
@@ -291,11 +300,29 @@ if ( $related_items_by_category->have_posts() ) : ?>
                             <span class="icon-heart3"></span>
                           </span>
                         </div>
+                        <!-- <div class="card-product__days">
+                            <?php _e('4 días/5 noches','tuku') ?>
+                        </div> -->
                       </div>
 
                       <div class="card-product__right">
                         <div class="card-product__right__content">
                           <div class="card-product__right__content__top">
+                            <div class="card-product__right__content__top__term">
+                                <?php
+                                    $tax   = 'itinerarios';
+                                    $iargs = array( 'hide_empty' => false );
+                                    $iterms = get_terms( $tax, $iargs );
+
+                                    $names = array();
+
+                                    foreach ( $iterms as $term ) {
+                                        $names[] = $term->name;
+                                    }
+
+                                    echo implode(', ', $names);
+                                ?>
+                            </div>
                             <div class="card-product__right__title">
                               <?php the_title(); ?>
                             </div>
@@ -335,7 +362,8 @@ if ( $related_items_by_category->have_posts() ) : ?>
                                 <?php endif; ?>
                               </div>
                               <div class="card-product__right__action">
-                                <?php echo esc_html( $related_price ); ?> <?php _e( 'US$', 'tuku' ) ?>
+                                <?php _e( '$', 'tuku' ) ?>
+                                <span><?php echo esc_html( $related_price ); ?> </span>
                               </div>
                               <div href="<?php the_permalink(); ?>" class="card-product__right__action-hover">
                                 <?php _e( 'Ver tour', 'tuku' ) ?> <span class="icon-next"></span>
@@ -367,7 +395,7 @@ if ( $related_items_by_category->have_posts() ) : ?>
     jQuery(document).ready(function() {
         new Swiper('.swiper-container-popular-home', {
             slidesPerView: 1,
-            spaceBetween: 40,
+            spaceBetween: 25,
             autoplay: {
                 delay: 5000,
                 disableOnInteraction: false,
