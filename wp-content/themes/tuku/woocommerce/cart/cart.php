@@ -59,7 +59,8 @@ get_header();
                             // Get dates and guests from cart item
                             $start_date = ! empty( $cart_item['tuku_start_date'] ) ? $cart_item['tuku_start_date'] : '';
                             $end_date   = ! empty( $cart_item['tuku_end_date'] )   ? $cart_item['tuku_end_date']   : '';
-                            $guests     = ! empty( $cart_item['tuku_guests'] )      ? (int) $cart_item['tuku_guests'] : $cart_item['quantity'];
+                            $guests     = ! empty( $cart_item['tuku_guests'] )   ? (int) $cart_item['tuku_guests']   : $cart_item['quantity'];
+                            $children   = isset( $cart_item['tuku_children'] )   ? (int) $cart_item['tuku_children'] : null;
 
                             // Format dates
                             $date_display = '';
@@ -125,6 +126,9 @@ get_header();
                                         <span class="tuku-cart-item__guests">
                                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                                             <?php echo esc_html( $guests ); ?> <?php echo $guests === 1 ? __('adulto','tuku') : __('adultos','tuku'); ?>
+                                            <?php if ( $children !== null ) : ?>
+                                                , <?php echo esc_html( $children ); ?> <?php echo $children === 1 ? __('niño','tuku') : __('niños','tuku'); ?>
+                                            <?php endif; ?>
                                         </span>
                                     <?php endif; ?>
                                 </div>
@@ -399,6 +403,10 @@ if ( $related_items_by_category->have_posts() ) : ?>
             autoplay: {
                 delay: 5000,
                 disableOnInteraction: false,
+            },
+            navigation: {
+                nextEl: '.next-slide-car',
+                prevEl: '.prev-slide-car',
             },
             breakpoints: {
                 640: { slidesPerView: 2 },

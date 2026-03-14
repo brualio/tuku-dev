@@ -227,6 +227,7 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
     height: 35px !important;
     font-size: 18px !important;
 }
+.next-slide-car, .prev-slide-car { cursor: pointer; }
 	.related__tours .prev-slide-car{
 	width: 42px !important;
 	height: 42px !important;
@@ -666,6 +667,104 @@ color: rgba(56, 55, 55, 0.6);
 
 .pac-guests-col .guest-label {
 	color: #666;
+}
+
+/* Guests popup trigger */
+.pac-guests-col {
+    cursor: pointer;
+    position: relative;
+}
+
+.guests-summary-text {
+    flex: 1;
+    color: #323232;
+}
+
+/* Guests popup card */
+.guests-popup {
+    display: none;
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    padding: 20px;
+    min-width: 280px;
+    z-index: 9999;
+    border: 1px solid #f0f0f0;
+}
+
+.guests-popup-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.guests-popup-row:last-of-type {
+    border-bottom: none;
+}
+
+.guests-popup-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.guests-popup-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: #323232;
+}
+
+.guests-popup-sub {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    color: #888;
+}
+
+.guests-popup-counter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.guests-popup-counter .guest-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+}
+
+.guests-popup-counter span {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    min-width: 24px;
+    text-align: center;
+    color: #323232;
+}
+
+.guests-popup-apply {
+    display: block;
+    width: 100%;
+    margin-top: 16px;
+    padding: 12px;
+    background: #d81159;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.guests-popup-apply:hover {
+    background: #b50e48;
 }
 
 /* ===================================
@@ -2194,4 +2293,87 @@ color: rgba(56, 55, 55, 0.6);
 	margin-bottom: 16px;
 	font-family: 'Poppins', sans-serif;
 	border-radius: 10px;
+}
+
+/* --------------------------------
+   Catalogo sidebar – category filter
+   -------------------------------- */
+
+/* Individual checkbox rows — use pseudo-elements instead of background-image */
+.catalogo .filter-item .facetwp-checkbox {
+	position: relative;
+	display: flex;
+	align-items: center;
+	padding: 5px 0 5px 26px;
+	font-family: 'Poppins', sans-serif;
+	font-size: 14px;
+	color: #3e3e3e;
+	cursor: pointer;
+	transition: color 0.15s ease;
+	line-height: 1.4;
+	user-select: none;
+	background-image: none !important;
+}
+
+/* Checkbox box (unchecked) */
+.catalogo .filter-item .facetwp-checkbox::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 16px;
+	height: 16px;
+	border: 1.5px solid #ccc;
+	border-radius: 3px;
+	background-color: #fff;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 10px 10px;
+	transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+/* Checked state — pink fill + SVG checkmark inside the box */
+.catalogo .filter-item .facetwp-checkbox.checked::before {
+	background-color: #d81159;
+	border-color: #d81159;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpolyline points='1.5,5 4,7.5 8.5,2' fill='none' stroke='%23fff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.catalogo .filter-item .facetwp-checkbox.checked {
+	color: #d81159;
+	font-weight: 600;
+}
+
+.catalogo .filter-item .facetwp-checkbox:hover {
+	color: #d81159;
+}
+
+.catalogo .filter-item .facetwp-checkbox:hover::before {
+	border-color: #d81159;
+}
+
+/* Result count in parentheses */
+.catalogo .filter-item .facetwp-counter {
+	margin-left: 5px;
+	font-size: 12px;
+	color: #aaa;
+}
+
+/* "Ver N más" toggle */
+.catalogo .filter-item .facetwp-toggle {
+	display: inline-block;
+	margin-top: 8px;
+	padding: 0;
+	font-family: 'Poppins', sans-serif;
+	font-size: 13px;
+	font-weight: 600;
+	color: #d81159;
+	text-decoration: none;
+	cursor: pointer;
+	transition: opacity 0.15s ease;
+}
+
+.catalogo .filter-item .facetwp-toggle:hover {
+	opacity: 0.75;
 }

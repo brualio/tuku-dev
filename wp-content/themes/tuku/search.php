@@ -172,6 +172,8 @@ get_header();
                             </div>
                         </div>
                     </div>
+                    <?php $seguridad_check = get_posts( [ 'post_type' => 'product', 'posts_per_page' => 1, 'fields' => 'ids', 'tax_query' => [ [ 'taxonomy' => 'seguridad', 'operator' => 'EXISTS' ] ] ] );
+                    if ( ! empty( $seguridad_check ) ) : ?>
                     <div class="filter">
                         <div class="filter-item">
                             <div class="filter-item__title"><?php _e('Seguridad','tuku') ?></div>
@@ -180,6 +182,7 @@ get_header();
                             </div>
                         </div>
                     </div>
+                    <?php endif; ?>
                 </div>
                 <div class="catalogo-content__right">
                     <div class="catalogo-content__right-content">
@@ -268,10 +271,12 @@ get_header();
    
 
 
-        <div class="filter-item__title"><?php _e('Seguridad','tulu') ?></div>
+        <?php if ( ! empty( $seguridad_check ) ) : ?>
+        <div class="filter-item__title"><?php _e('Seguridad','tuku') ?></div>
         <div class="filter-item__content">
             <?php echo do_shortcode( '[facetwp facet="seguridad_mobile"]' ); ?>
         </div>
+        <?php endif; ?>
   
 
 

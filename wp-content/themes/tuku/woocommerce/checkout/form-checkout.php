@@ -21,9 +21,13 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 
 // Calculate total guests from cart
 $total_guests = 0;
+$total_children = 0;
 foreach ( WC()->cart->get_cart() as $cart_item ) {
     $g = ! empty( $cart_item['tuku_guests'] ) ? (int) $cart_item['tuku_guests'] : (int) $cart_item['quantity'];
     $total_guests += $g;
+    if ( isset( $cart_item['tuku_children'] ) ) {
+        $total_children += (int) $cart_item['tuku_children'];
+    }
 }
 if ( $total_guests < 1 ) $total_guests = 1;
 
@@ -124,7 +128,7 @@ get_header();
 
                                     <?php for ( $t = 0; $t < $total_guests; $t++ ) :
                                         $is_first = ( $t === 0 );
-                                        $is_last  = ( $t === $total_guests - 1 );
+                                        $is_last  = ( $t === $total_guests - 1 && $total_children === 0 );
                                         $sid      = $t === 0 ? '' : '_' . $t;
 
                                         // Field names: traveler 0 uses WC billing fields for compatibility
@@ -226,12 +230,70 @@ get_header();
                                     </div>
                                     <?php endfor; ?>
 
+                                    <?php for ( $c = 0; $c < $total_children; $c++ ) :
+                                        $slide_index  = $total_guests + $c;
+                                        $is_last_child = ( $c === $total_children - 1 );
+                                        $cid = '_c' . $c;
+                                        $fn_first  = "tuku_children_travelers[{$c}][first_name]";
+                                        $fn_last   = "tuku_children_travelers[{$c}][last_name]";
+                                        $fn_birth  = "tuku_children_travelers[{$c}][birthdate]";
+                                        $fn_gender = "tuku_children_travelers[{$c}][gender]";
+                                    ?>
+                                    <div class="tuku-traveler-slide" data-traveler="<?php echo $slide_index; ?>">
+                                        <div class="tuku-traveler-label">
+                                            <strong><?php printf( __( 'Niño %d', 'tuku' ), $c + 1 ); ?></strong>
+                                            <p class="tuku-traveler-sublabel"><?php _e( 'Hasta los 3 años', 'tuku' ); ?></p>
+                                        </div>
+
+                                        <div class="tuku-form-row tuku-form-row--2col">
+                                            <div class="tuku-form-field">
+                                                <label><?php _e( 'Nombres', 'tuku' ); ?> <abbr class="required">*</abbr></label>
+                                                <input type="text" id="tuku_first_name<?php echo $cid; ?>" name="<?php echo esc_attr( $fn_first ); ?>" placeholder="<?php esc_attr_e( 'Ej: Sofía', 'tuku' ); ?>" required>
+                                            </div>
+                                            <div class="tuku-form-field">
+                                                <label><?php _e( 'Apellidos', 'tuku' ); ?> <abbr class="required">*</abbr></label>
+                                                <input type="text" id="tuku_last_name<?php echo $cid; ?>" name="<?php echo esc_attr( $fn_last ); ?>" placeholder="<?php esc_attr_e( 'Ej: Pérez López', 'tuku' ); ?>" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="tuku-form-row tuku-form-row--2col">
+                                            <div class="tuku-form-field">
+                                                <label><?php _e( 'Fecha de nacimiento', 'tuku' ); ?> <abbr class="required">*</abbr></label>
+                                                <input type="date" id="tuku_birthdate<?php echo $cid; ?>" name="<?php echo esc_attr( $fn_birth ); ?>" required>
+                                            </div>
+                                            <div class="tuku-form-field">
+                                                <label><?php _e( 'Género', 'tuku' ); ?> <abbr class="required">*</abbr></label>
+                                                <div class="tuku-input-group-select">
+                                                    <select id="tuku_gender<?php echo $cid; ?>" name="<?php echo esc_attr( $fn_gender ); ?>" class="tuku-select" required>
+                                                        <option value=""><?php _e( 'Seleccionar', 'tuku' ); ?></option>
+                                                        <option value="Masculino"><?php _e( 'Masculino', 'tuku' ); ?></option>
+                                                        <option value="Femenino"><?php _e( 'Femenino', 'tuku' ); ?></option>
+                                                        <option value="Otro"><?php _e( 'Otro', 'tuku' ); ?></option>
+                                                        <option value="Prefiero no decir"><?php _e( 'Prefiero no decir', 'tuku' ); ?></option>
+                                                    </select>
+                                                    <span class="icons icons-arrow-down"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="tuku-step-actions">
+                                            <button type="button" class="tuku-btn-prev-traveler" data-traveler-prev="<?php echo $slide_index - 1; ?>"><?php _e( 'Anterior', 'tuku' ); ?></button>
+                                            <?php if ( ! $is_last_child ) : ?>
+                                            <button type="button" class="tuku-btn-next tuku-btn-next-traveler" data-traveler-next="<?php echo $slide_index + 1; ?>"><?php _e( 'Siguiente', 'tuku' ); ?></button>
+                                            <?php else : ?>
+                                            <button type="button" class="tuku-btn-next tuku-btn-next-step" data-next="2"><?php _e( 'Siguiente', 'tuku' ); ?></button>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                    <?php endfor; ?>
+
                                 </div><!-- .tuku-travelers-track -->
                             </div><!-- .tuku-travelers-slider -->
 
-                            <?php if ( $total_guests > 1 ) : ?>
+                            <?php $total_travelers = $total_guests + $total_children; ?>
+                            <?php if ( $total_travelers > 1 ) : ?>
                             <div class="tuku-traveler-dots" id="tuku-traveler-dots">
-                                <?php for ( $t = 0; $t < $total_guests; $t++ ) : ?>
+                                <?php for ( $t = 0; $t < $total_travelers; $t++ ) : ?>
                                 <span class="tuku-traveler-dot<?php echo $t === 0 ? ' active' : ''; ?>" data-traveler="<?php echo $t; ?>"></span>
                                 <?php endfor; ?>
                             </div>
@@ -382,7 +444,8 @@ get_header();
 
                                 $start_date = ! empty( $cart_item['tuku_start_date'] ) ? $cart_item['tuku_start_date'] : '';
                                 $end_date   = ! empty( $cart_item['tuku_end_date'] )   ? $cart_item['tuku_end_date']   : '';
-                                $guests     = ! empty( $cart_item['tuku_guests'] )      ? (int) $cart_item['tuku_guests'] : $cart_item['quantity'];
+                                $guests     = ! empty( $cart_item['tuku_guests'] )   ? (int) $cart_item['tuku_guests']   : $cart_item['quantity'];
+                                $children   = isset( $cart_item['tuku_children'] )   ? (int) $cart_item['tuku_children'] : null;
 
                                 $date_display = '';
                                 if ( $start_date ) {
@@ -415,6 +478,9 @@ get_header();
                                         <span class="tuku-order-item__meta">
                                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                                             <?php echo esc_html( $guests ); ?> <?php echo $guests === 1 ? __('adulto','tuku') : __('adultos','tuku'); ?>
+                                            <?php if ( $children !== null ) : ?>
+                                                , <?php echo esc_html( $children ); ?> <?php echo $children === 1 ? __('niño','tuku') : __('niños','tuku'); ?>
+                                            <?php endif; ?>
                                         </span>
                                     <?php endif; ?>
                                 </div>
@@ -512,7 +578,9 @@ get_header();
 (function() {
     var currentStep = 1;
     var currentTraveler = 0;
-    var totalTravelers = <?php echo (int) $total_guests; ?>;
+    var totalAdults   = <?php echo (int) $total_guests; ?>;
+    var totalChildren = <?php echo (int) $total_children; ?>;
+    var totalTravelers = totalAdults + totalChildren;
 
     // ── Traveler slider ──────────────────────────────────────────
     var track = document.getElementById('tuku-travelers-track');
@@ -581,7 +649,7 @@ get_header();
     function buildSummary(step) {
         var html = '';
         if (step === 1) {
-            for (var t = 0; t < totalTravelers; t++) {
+            for (var t = 0; t < totalAdults; t++) {
                 var sid = t === 0 ? '' : '_' + t;
                 var firstEl  = document.getElementById('tuku_first_name' + sid);
                 var lastEl   = document.getElementById('tuku_last_name' + sid);
@@ -598,6 +666,21 @@ get_header();
                 html += (firstEl.value + ' ' + lastEl.value).trim() + '<br>';
                 if (docEl && docNumEl) html += docEl.value + ' ' + docNumEl.value + '<br>';
                 if (ctryEl) html += ctryEl.options[ctryEl.selectedIndex].text + '<br>';
+                if (birthEl && birthEl.value) html += birthEl.value + '<br>';
+                if (genderEl && genderEl.value) html += genderEl.options[genderEl.selectedIndex].text;
+            }
+            for (var c = 0; c < totalChildren; c++) {
+                var cid = '_c' + c;
+                var firstEl  = document.getElementById('tuku_first_name' + cid);
+                var lastEl   = document.getElementById('tuku_last_name' + cid);
+                var birthEl  = document.getElementById('tuku_birthdate' + cid);
+                var genderEl = document.getElementById('tuku_gender' + cid);
+
+                if (!firstEl) continue;
+
+                html += '<br>';
+                html += '<strong>Niño ' + (c + 1) + '</strong><br>';
+                html += (firstEl.value + ' ' + lastEl.value).trim() + '<br>';
                 if (birthEl && birthEl.value) html += birthEl.value + '<br>';
                 if (genderEl && genderEl.value) html += genderEl.options[genderEl.selectedIndex].text;
             }
@@ -775,7 +858,13 @@ get_header();
                 { first: 'Luis',   last: 'Martínez' },
             ];
 
-            for (var t = 0; t < totalTravelers; t++) {
+            var kidNames = [
+                { first: 'Sofía',   last: 'Pérez' },
+                { first: 'Diego',   last: 'García' },
+                { first: 'Valeria', last: 'López' },
+            ];
+
+            for (var t = 0; t < totalAdults; t++) {
                 var sid  = t === 0 ? '' : '_' + t;
                 var name = names[t % names.length];
 
@@ -792,6 +881,16 @@ get_header();
                     var warn = slide.querySelector('.tuku-doc-warning');
                     if (warn) warn.style.display = 'none';
                 }
+            }
+
+            for (var c = 0; c < totalChildren; c++) {
+                var cid  = '_c' + c;
+                var name = kidNames[c % kidNames.length];
+
+                setVal('tuku_first_name' + cid, name.first);
+                setVal('tuku_last_name'  + cid, name.last);
+                setVal('tuku_birthdate'  + cid, '2024-03-01');
+                setVal('tuku_gender'     + cid, 'Femenino');
             }
 
             setVal('billing_email',         'demo@tuku.com.pe');

@@ -947,6 +947,9 @@ function tuku_add_cart_item_data( $cart_item_data, $product_id ) {
     if ( ! empty( $_POST['tuku_guests'] ) ) {
         $cart_item_data['tuku_guests'] = absint( $_POST['tuku_guests'] );
     }
+    if ( isset( $_POST['tuku_children'] ) ) {
+        $cart_item_data['tuku_children'] = absint( $_POST['tuku_children'] );
+    }
     return $cart_item_data;
 }
 add_filter( 'woocommerce_add_cart_item_data', 'tuku_add_cart_item_data', 10, 2 );
@@ -969,8 +972,14 @@ function tuku_get_item_data( $item_data, $cart_item ) {
     }
     if ( ! empty( $cart_item['tuku_guests'] ) && $cart_item['tuku_guests'] > 0 ) {
         $item_data[] = [
-            'key'   => __( 'Viajeros', 'tuku' ),
+            'key'   => __( 'Adultos', 'tuku' ),
             'value' => $cart_item['tuku_guests'],
+        ];
+    }
+    if ( isset( $cart_item['tuku_children'] ) && $cart_item['tuku_children'] >= 0 ) {
+        $item_data[] = [
+            'key'   => __( 'Niños', 'tuku' ),
+            'value' => $cart_item['tuku_children'],
         ];
     }
     return $item_data;
@@ -988,7 +997,10 @@ function tuku_checkout_create_order_line_item( $item, $cart_item_key, $values, $
         $item->add_meta_data( __( 'Fecha fin', 'tuku' ), $values['tuku_end_date'] );
     }
     if ( ! empty( $values['tuku_guests'] ) ) {
-        $item->add_meta_data( __( 'Viajeros', 'tuku' ), $values['tuku_guests'] );
+        $item->add_meta_data( __( 'Adultos', 'tuku' ), $values['tuku_guests'] );
+    }
+    if ( isset( $values['tuku_children'] ) ) {
+        $item->add_meta_data( __( 'Niños', 'tuku' ), $values['tuku_children'] );
     }
 }
 add_action( 'woocommerce_checkout_create_order_line_item', 'tuku_checkout_create_order_line_item', 10, 4 );
@@ -1085,3 +1097,38 @@ function tuku_admin_order_data( $order ) {
     }
 }
 add_action( 'woocommerce_admin_order_data_after_billing_address', 'tuku_admin_order_data' );
+
+/**
+ * ACF: Related products for itinerary (registered programmatically)
+ */
+add_action( 'acf/init', 'tuku_register_acf_related_products' );
+function tuku_register_acf_related_products() {
+    if ( ! function_exists( 'acf_add_local_field_group' ) ) return;
+
+    acf_add_local_field_group( array(
+        'key'    => 'group_productos_itinerario',
+        'title'  => 'Productos relacionados – Itinerario',
+        'fields' => array(
+            array(
+                'key'           => 'field_productos_itinerario',
+                'label'         => 'Productos del itinerario',
+                'name'          => 'productos_itinerario',
+                'type'          => 'post_object',
+                'post_type'     => array( 'product' ),
+                'allow_null'    => 1,
+                'multiple'      => 1,
+                'return_format' => 'object',
+                'ui'            => 1,
+            ),
+        ),
+        'location' => array(
+            array(
+                array(
+                    'param'    => 'post_type',
+                    'operator' => '==',
+                    'value'    => 'product',
+                ),
+            ),
+        ),
+    ) );
+}

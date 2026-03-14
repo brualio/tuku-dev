@@ -187,11 +187,15 @@ while ( have_posts() ) :
                             </ul>
                         </div>
                         <?php endif; ?>
-                        <?php if ( have_rows( 'summary' ) ) : $s;?>
+                        <?php
+                        $productos_itinerario = get_field( 'productos_itinerario' );
+                        if ( have_rows( 'summary' ) || ! empty( $productos_itinerario ) ) :
+                            $s = 0;
+                        ?>
                             <div id="itinerary" class="itinerario__wrap">
                                 <h1><?php _e('Resumen de itinerario','tuku') ?></h3>
                                 <div class="accordeon__itineratio">
-                                    <?php while ( have_rows( 'summary' ) ) : the_row(); $s++;?>
+                                    <?php while ( have_rows( 'summary' ) ) : the_row(); $s++; ?>
                                         <div class="accordeon-item">
                                             <div class="accordeon-title">
                                                 <div class="wrap__number"><?php echo $s; ?></div>
@@ -205,6 +209,26 @@ while ( have_posts() ) :
                                             </div>
                                         </div>
                                     <?php endwhile; ?>
+                                    <?php if ( ! empty( $productos_itinerario ) ) : ?>
+                                        <?php foreach ( $productos_itinerario as $related_product ) : ?>
+                                            <?php if ( have_rows( 'summary', $related_product->ID ) ) : ?>
+                                                <?php while ( have_rows( 'summary', $related_product->ID ) ) : the_row(); $s++; ?>
+                                                    <div class="accordeon-item">
+                                                        <div class="accordeon-title">
+                                                            <div class="wrap__number"><?php echo $s; ?></div>
+                                                            <div class="wrap__title__iti">
+                                                                <h6><?php _e('Día','tuku') ?> <?php echo $s; ?></h6>
+                                                                <h3><?php the_sub_field( 'titulo_summary' ); ?></h3>
+                                                            </div>
+                                                        </div>
+                                                        <div class="accordeon-content">
+                                                            <?php the_sub_field( 'contenido_summary' ); ?>
+                                                        </div>
+                                                    </div>
+                                                <?php endwhile; ?>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -507,11 +531,34 @@ while ( have_posts() ) :
                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                 <circle cx="12" cy="7" r="4"></circle>
                             </svg>
-                            <button type="button" class="guest-btn guest-minus" aria-label="Menos">−</button>
-                            <span class="guest-count">1</span>
-                            <button type="button" class="guest-btn guest-plus" aria-label="Más">+</button>
-                            <span class="guest-label"><?php _e('adulto','tuku') ?></span>
+                            <span class="guests-summary-text"><?php echo $is_spanish ? '1 adulto, 0 niños' : '1 adult, 0 children'; ?></span>
                             <input type="hidden" id="pac-entry-guests" name="pac_guests" value="1">
+                            <input type="hidden" id="pac-entry-children" name="pac_children" value="0">
+                            <div class="guests-popup">
+                                <div class="guests-popup-row">
+                                    <div class="guests-popup-info">
+                                        <span class="guests-popup-title"><?php echo $is_spanish ? 'Adultos' : 'Adults'; ?></span>
+                                        <span class="guests-popup-sub"><?php echo $is_spanish ? 'De 4 años en adelante' : '4 years and above'; ?></span>
+                                    </div>
+                                    <div class="guests-popup-counter">
+                                        <button type="button" class="guest-btn adults-minus" aria-label="Menos">−</button>
+                                        <span class="adults-count">1</span>
+                                        <button type="button" class="guest-btn adults-plus" aria-label="Más">+</button>
+                                    </div>
+                                </div>
+                                <div class="guests-popup-row">
+                                    <div class="guests-popup-info">
+                                        <span class="guests-popup-title"><?php echo $is_spanish ? 'Niños' : 'Children'; ?></span>
+                                        <span class="guests-popup-sub"><?php echo $is_spanish ? 'Hasta los 3 años' : 'Up to 3 years'; ?></span>
+                                    </div>
+                                    <div class="guests-popup-counter">
+                                        <button type="button" class="guest-btn children-minus" aria-label="Menos">−</button>
+                                        <span class="children-count">0</span>
+                                        <button type="button" class="guest-btn children-plus" aria-label="Más">+</button>
+                                    </div>
+                                </div>
+                                <button type="button" class="guests-popup-apply"><?php echo $is_spanish ? 'Aplicar' : 'Apply'; ?></button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -616,27 +663,51 @@ while ( have_posts() ) :
                         flatpickr(dateInput, fpOptions);
                     }
 
-                    // Guest counter
+                    // Guest counter popup
                     function initGuestCounter() {
                         var col = document.querySelector('.pac-guests-col');
                         if (!col) return;
-                        var countEl = col.querySelector('.guest-count');
-                        var labelEl = col.querySelector('.guest-label');
-                        var hiddenInput = document.getElementById('pac-entry-guests');
-                        var minusBtn = col.querySelector('.guest-minus');
-                        var plusBtn = col.querySelector('.guest-plus');
-                        var count = 1;
+                        var popup = col.querySelector('.guests-popup');
+                        var summaryEl = col.querySelector('.guests-summary-text');
+                        var adultsCountEl = col.querySelector('.adults-count');
+                        var childrenCountEl = col.querySelector('.children-count');
+                        var adultsHidden = document.getElementById('pac-entry-guests');
+                        var childrenHidden = document.getElementById('pac-entry-children');
+                        var adults = 1, children = 0;
 
-                        function update() {
-                            countEl.textContent = count;
-                            hiddenInput.value = count;
-                            labelEl.textContent = count === 1 ? (isSpanish ? 'adulto' : 'adult') : (isSpanish ? 'adultos' : 'adults');
-                            minusBtn.disabled = count <= 1;
+                        function updateSummary() {
+                            adultsHidden.value = adults;
+                            childrenHidden.value = children;
+                            adultsCountEl.textContent = adults;
+                            childrenCountEl.textContent = children;
+                            col.querySelector('.adults-minus').disabled = adults <= 1;
+                            col.querySelector('.children-minus').disabled = children <= 0;
+                            var adultLabel = isSpanish ? (adults === 1 ? 'adulto' : 'adultos') : (adults === 1 ? 'adult' : 'adults');
+                            var childLabel = isSpanish ? (children === 1 ? 'niño' : 'niños') : (children === 1 ? 'child' : 'children');
+                            summaryEl.textContent = adults + ' ' + adultLabel + ', ' + children + ' ' + childLabel;
                         }
 
-                        minusBtn.addEventListener('click', function(e) { e.stopPropagation(); if (count > 1) { count--; update(); } });
-                        plusBtn.addEventListener('click', function(e) { e.stopPropagation(); if (count < 20) { count++; update(); } });
-                        update();
+                        col.querySelector('.adults-minus').addEventListener('click', function(e) { e.stopPropagation(); if (adults > 1) { adults--; updateSummary(); } });
+                        col.querySelector('.adults-plus').addEventListener('click', function(e) { e.stopPropagation(); if (adults < 20) { adults++; updateSummary(); } });
+                        col.querySelector('.children-minus').addEventListener('click', function(e) { e.stopPropagation(); if (children > 0) { children--; updateSummary(); } });
+                        col.querySelector('.children-plus').addEventListener('click', function(e) { e.stopPropagation(); if (children < 20) { children++; updateSummary(); } });
+
+                        col.querySelector('.guests-popup-apply').addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            popup.style.display = 'none';
+                        });
+
+                        col.addEventListener('click', function() {
+                            popup.style.display = (popup.style.display === 'block') ? 'none' : 'block';
+                        });
+
+                        document.addEventListener('click', function(e) {
+                            if (!col.contains(e.target)) {
+                                popup.style.display = 'none';
+                            }
+                        });
+
+                        updateSummary();
                     }
 
                     function syncForm() {
@@ -645,6 +716,7 @@ while ( have_posts() ) :
                         form.querySelector('.tuku-start-date').value = window.pac_selected_date || '';
                         form.querySelector('.tuku-end-date').value = window.pac_selected_date_end || '';
                         form.querySelector('.tuku-guests-input').value = document.getElementById('pac-entry-guests').value;
+                        form.querySelector('.tuku-children-input').value = document.getElementById('pac-entry-children').value;
                         form.querySelector('.tuku-qty-input').value = document.getElementById('pac-entry-guests').value;
                     }
 
@@ -672,6 +744,7 @@ while ( have_posts() ) :
                     <input type="hidden" name="tuku_start_date" value="" class="tuku-start-date">
                     <input type="hidden" name="tuku_end_date" value="" class="tuku-end-date">
                     <input type="hidden" name="tuku_guests" value="1" class="tuku-guests-input">
+                    <input type="hidden" name="tuku_children" value="0" class="tuku-children-input">
                     <button type="submit" class="btn-add-to-cart"><?php _e('Agregar al carrito','tuku') ?></button>
                 </form>
             </div>
@@ -996,6 +1069,10 @@ get_footer( 'shop' );
             autoplay: {
                 delay: 5000,
                 disableOnInteraction: false,
+            },
+            navigation: {
+                nextEl: '.next-slide-car',
+                prevEl: '.prev-slide-car',
             },
 	        breakpoints: {
 	            640: {
