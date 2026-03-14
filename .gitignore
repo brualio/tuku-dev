@@ -7,8 +7,12 @@
 # you can delete this whole section/until Configuration.
 /wp-admin/
 /wp-content/index.php
+/wp-content/cache/
 /wp-content/languages
 /wp-content/plugins/index.php
+/wp-content/plugins/
+/wp-content/themes/new_tuku/
+/wp-content/themes/t__uku/
 /wp-content/themes/index.php
 /wp-includes/
 /index.php
@@ -16,7 +20,8 @@
 /readme.html
 /wp-*.php
 /xmlrpc.php
-
+*.zip
+.DS_Store
 # Configuration
 wp-config.php
 
