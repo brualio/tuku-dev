@@ -11,7 +11,7 @@ $image = get_field('imagen_banner', 'term_30');
 <div class="breacrumbs">
     <div class="breacrumbs__links">
         <a href="#"><?php _e('Viaja a Peru') ?></a>
-        <a href=""><?php single_cat_title(); ?></a>
+        <a href=""><?php single_cat_title(); ?> </a>
     </div>
 </div>
 
@@ -123,22 +123,6 @@ $image = get_field('imagen_banner', 'term_30');
                         <a href="<?php the_permalink(  ); ?>" class="card-product whislist" data-product="<?php echo $current_id ?>">
                             <div class="card-product__left">
                                 <?php the_post_thumbnail( 'thumbnail-tour' ); ?>
-                                <div class="card-product__left__top">
-                                    <?php
-                                        $tax = 'itinerarios';
-                                        $terms = get_terms( $tax, $args = array(
-                                            'hide_empty' => false, // do not hide empty terms
-                                        ));
-                                        foreach( $terms as $term ) {
-                                            $image = get_field('icono_iti', 'itinerarios_' . $term->term_id );
-                                            if( $term->count > 0 ) {
-                                                echo '<div class="card-product__left__top__item">';
-                                                echo '<img src="' . $image['url'] . '" alt="' . $image['alt'] .'">';       
-                                                echo '</div>';
-                                            } 
-                                        }              
-                                    ?>
-                                </div>
 
                                 <div class="card-product__left__bottom">
                                     <span class="card-product__heart">
@@ -150,6 +134,19 @@ $image = get_field('imagen_banner', 'term_30');
                             <div class="card-product__right">
                                 <div class="card-product__right__content">
                                     <div class="card-product__right__content__top">
+                                        <div class="card-product__right__content__top__term">
+                                            <?php   // Get terms for post
+                                                $terms = get_the_terms($post->ID, 'itinerarios');
+                                                if ($terms && !is_wp_error($terms)) {
+                                                    $names = wp_list_pluck($terms, 'name');
+                                                    foreach ($names as $i => $name) {
+                                                        echo '<span>'.$name.'</span>';
+                                                        if ($i < count($names) - 1) echo ', ';
+                                                    }
+
+                                                }
+                                            ?>
+                                        </div>
                                         <div class="card-product__right__title">
                                             <?php the_title(); ?>
                                         </div>
@@ -194,13 +191,16 @@ $image = get_field('imagen_banner', 'term_30');
                                             <?php endif; ?>
                                         </div>
                                         <div class="card-product__right__action">
-                                            <?php
-                                            // Get WooCommerce price
-                                            $product = wc_get_product(get_the_ID());
-                                            if ($product) {
-                                                echo esc_html($product->get_price());
-                                            }
-                                            ?> <?php _e('US$','tuku') ?>
+                                            <?php _e('$','tuku') ?>
+                                            <span>
+                                                <?php
+                                                // Get WooCommerce price
+                                                $product = wc_get_product(get_the_ID());
+                                                if ($product) {
+                                                    echo esc_html($product->get_price());
+                                                }
+                                                ?>
+                                            </span>
                                         </div>
                                         <div class="card-product__right__action-hover">
                                             <?php _e('Ver tour','tuku') ?> <span class="icon-next"></span>

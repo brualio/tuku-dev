@@ -271,18 +271,7 @@
               <div class="header__right__search">
                 <span class="icon-magnifying-glass"></span>
               </div>
-              <?php
-              $currentlang = get_bloginfo('language');
-              if($currentlang=="es"):
-                ?>
-                <a href="<?php echo get_home_url(); ?>/mi-lista-de-deseos" class="header__right__whist">
-                  <?php _e('Mi lista de deseos','tuku') ?> <span class="icon-heart1"></span>
-                </a>
-                <?php elseif($currentlang=="en-US"): ?>
-                  <a href="<?php echo get_home_url(); ?>/my-wishlist" class="header__right__whist">
-                    My wish list <span class="icon-heart1"></span>
-                  </a>
-                <?php endif; ?>
+              
 				<div class="header__right__mail">
 					<div class="header__dropdown__icon">
 						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -319,11 +308,7 @@
                 <?php if ( class_exists( 'WooCommerce' ) ) : ?>
                 <div class="header__right__cart">
                     <a href="<?php echo wc_get_cart_url(); ?>" class="header__cart-link" id="header-cart-toggle">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                            <line x1="3" y1="6" x2="21" y2="6"></line>
-                            <path d="M16 10a4 4 0 0 1-8 0"></path>
-                        </svg>
+                        <span class="icons icons-cart"></span>
                         <?php $cart_count = WC()->cart ? WC()->cart->get_cart_contents_count() : 0; ?>
                         <span class="cart-count <?php echo $cart_count ? '' : 'hidden'; ?>"><?php echo $cart_count; ?></span>
                     </a>

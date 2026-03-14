@@ -305,6 +305,7 @@ function scripts_staffdigital(){
 //CSS
 
     wp_enqueue_style('app-css', get_template_directory_uri() . '/assets/css/app.css');
+	wp_enqueue_style('style-css', get_template_directory_uri() . '/css/style.css');
     wp_enqueue_style('swiper-css', get_template_directory_uri() . '/assets/css/swiper-bundle.css');
     wp_enqueue_style('lg-css', get_template_directory_uri() . '/assets/css/lightgallery.min.css');
     wp_enqueue_style('ui-css', get_template_directory_uri() . '/assets/css/jquery-ui.css');
